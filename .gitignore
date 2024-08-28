@@ -50,3 +50,12 @@ modules.order
 Module.symvers
 Mkfile.old
 dkms.conf
+/.vs
+/Core/bin/Debug/net8.0
+/Core/obj
+/LMS/bin/Debug/net8.0
+/LMS/Logs
+/LMS/obj
+/LMS/ScaffoldingReadMe.txt
+/Logic/bin/Debug/net8.0
+/Logic/obj

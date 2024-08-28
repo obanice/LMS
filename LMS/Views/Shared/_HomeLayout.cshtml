@@ -1,0 +1,143 @@
+﻿@{
+    var randomStr = DateTime.Now.ToString().ToLower().Replace(":", "").Replace("pm", "").Replace("am", "");
+}
+<!DOCTYPE html>
+<html lang="en">
+
+    <head>
+        <meta charset="utf-8">
+        <meta content="width=device-width, initial-scale=1.0" name="viewport">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0">
+        <meta charset="utf-8">
+        <meta content="en" />
+
+        <meta name="msapplication-starturl" content="https://vetzeal.com/" />
+        <meta property="og:url" content="https://vetzeal.com/" />
+        <meta property="article:publisher" content="https://bosoftware.co.uk/" />
+        <title>@ViewData["Title"] | LMS Software</title>
+
+        <!-- Google Fonts -->
+        <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Nunito:300,300i,400,400i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i" rel="stylesheet">
+        <!-- Favicon -->
+        <link rel="shortcut icon" type="image/x-icon" href="~/light/assets/img/favicon.png">
+        
+        <!-- Bootstrap CSS -->
+        <link rel="stylesheet" href="~/light/assets/css/bootstrap.min.css">
+		
+		<!-- Fontawesome CSS -->
+        <link rel="stylesheet" href="~/light/assets/css/font-awesome.min.css">
+
+        <!-- Main CSS -->
+        <link href="~/light/assets/css/style.css" rel="stylesheet" />
+
+        <link href="~/css/sweetalert2.css" rel="stylesheet" />
+        <link href="~/css/jquery-ui.css" rel="stylesheet" />
+        
+        <link href="~/css/sweetalert2.css" rel="stylesheet" />
+
+        <script>
+            function errorAlert(message) {
+                Swal.fire({
+                    icon: 'error',
+                    text: message,
+                    timer: 60000,
+                    confirmButtonColor: "#366092",
+                })
+            }
+
+            function infoAlert(message) {
+                Swal.fire({
+                    icon: 'info',
+                    text: message,
+                    confirmButtonColor: "#366092",
+                })
+            }
+
+            function infoAlertWithStyles(message) {
+                Swal.fire({
+                    title: 'Incomplete Payment',
+                    icon: 'info',
+                    text: message,
+                    confirmButtonColor: "#366092",
+                })
+            }
+
+            function newInfoAlert(message, url) {
+                Swal.fire({
+                    icon: 'info',
+                    text: message,
+                    confirmButtonColor: "#366092",
+                }).then((isConfirm) => {
+                    if (isConfirm) {
+                        location.href = url;
+                    }
+                })
+            }
+
+            function successAlert(message) {
+                Swal.fire({
+                    icon: 'success',
+                    text: message,
+                    timer: 60000,
+                    confirmButtonColor: "#366092",
+                })
+            }
+
+            function newErrorAlert(message, url) {
+                Swal.fire({
+                    icon: 'error',
+                    text: message,
+                    confirmButtonColor: "#366092",
+                }).then((isConfirm) => {
+                    if (isConfirm) {
+                        location.reload(url);
+                    }
+                })
+            }
+
+            function newSuccessAlert(message, url) {
+                Swal.fire({
+                    icon: 'success',
+                    text: message,
+                    confirmButtonColor: "#366092",
+                }).then((isConfirm) => {
+                    if (isConfirm) {
+                        location.reload(url);
+                    }
+                })
+
+            }
+            function successAlertWithRedirect(message, url) {
+                Swal.fire({
+                    title: "Success",
+                    text: message,
+                    icon: "success",
+                    timer: 30000,
+                    overlay: "background - color: rgba(43, 165, 137, 0.45)",
+                    confirmButtonColor: "#366092",
+                }).then(function () {
+
+                    location.href = url;
+                })
+            }
+            function successAlertWithFunction(message, action) {
+                Swal.fire({
+                    title: "Success",
+                    text: message,
+                    icon: "success",
+                    timer: 30000,
+                    overlay: "background - color: rgba(43, 165, 137, 0.45)",
+                    confirmButtonColor: "#366092",
+                }).then(function () {
+                    action;
+                })
+            }
+        </script>
+    </head>
+
+    <body>
+        @RenderBody()
+        <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
+    </body>
+    <script src="~/js/base/security.js?v=@randomStr"></script>
+</html>

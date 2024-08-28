@@ -1,0 +1,59 @@
+﻿
+@{
+    ViewData["Title"] = "Login";
+    Layout = "~/Views/Shared/_HomeLayout.cshtml";
+}
+
+<!-- Main Wrapper -->
+<div class="main-wrapper">
+	<div class="account-content">
+		<div class="container">
+			<!-- Account Logo -->
+			<div class="account-logo">
+				<a href="#"><img src="~/light/assets/img/logo.png"></a>
+			</div>
+			<!-- /Account Logo -->
+
+			<div class="account-box">
+				<div class="account-wrapper">
+					<h3 class="account-title">Login</h3>
+					<div class="form-group">
+						<label class="mt-2"> Registered Email or Phone Number <span class="text-danger">*</span></label>
+						<input class="form-control" id="email" required type="text">
+					</div>
+					<div class="form-group">
+						<div class="row">
+							<div class="col">
+								<label>Password<span class="text-danger">*</span></label>
+							</div>
+							<div class="col-auto">
+								<a class="text-muted" asp-controller="Account" asp-action="ForgotPassword" style="cursor: pointer">
+									Forgot password?
+								</a>
+							</div>
+						</div>
+
+						<div class="  input-group" style="position :relative;">
+							<input class="form-control " required id="password" type="password">
+							<div class="">
+								<span class="" style=" position:absolute; z-index:99; right:10px; top:13px;">
+									<i class="fa fa-eye d-none fs - 5" id="passwordHide" onclick="PasswordHide()"></i>
+									<i class="fa fa-eye-slash  fs - 5" id="passwordShow" onclick="PasswordShow()"></i>
+								</span>
+							</div>
+
+						</div>
+					</div>
+					<div class="form-group text-center">
+						<button class="btn btn-primary account-btn" id="submit_btn" onclick="login()" type="submit">Login</button>
+					</div>
+					<div class="account-footer">
+						<p>Don't have an account yet? <a href="/Security/Account/Register">Register</a></p>
+					</div>
+					<!-- /Account Form -->
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<!-- /Main Wrapper -->
