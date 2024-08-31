@@ -8,6 +8,7 @@ using Hangfire.Storage;
 using Logic;
 using Logic.Helpers;
 using Logic.IHelpers;
+using Logic.Services;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http.Features;
@@ -24,13 +25,17 @@ public static class ServiceExtensions
 	{
 		services.AddScoped<IUserHelper, UserHelper>();
 		services.AddScoped<IAdminHelper, AdminHelper>();
+		services.AddScoped<IDropDownHelper, DropDownHelper>();
+		services.AddScoped<ISuperAdminHelper, SuperAdminHelper>();
+		services.AddScoped<IEmailHelper, EmailHelper>();
+		services.AddScoped<IEmailService, EmailService>();
 
 		return services;
 	}
 
 	public static IServiceCollection ConfigureAppSettings(this IServiceCollection services, IConfiguration configuration)
 	{
-		//services.AddSingleton<IEmailConfiguration>(configuration.GetSection("EmailConfiguration").Get<EmailConfiguration>());
+		services.AddSingleton<IEmailConfiguration>(configuration.GetSection("EmailConfiguration").Get<EmailConfiguration>());
 		//services.AddSingleton<IGeneralConfiguration>(configuration.GetSection("GeneralConfiguration").Get<GeneralConfiguration>());
 
 		return services;
@@ -243,5 +248,28 @@ public static class ServiceExtensions
 		}
 
 		await context.SaveChangesAsync();
+	}
+	public static async Task SeedCommonDropDownsAsync(AppDbContext context)
+	{
+		var existingDropdowns = await context.CommonDropDowns.Select(s => s.Name).ToListAsync();
+
+		existingDropdowns = existingDropdowns ?? new List<string>();
+		var dropdowns = new[]
+		{
+			new { DropdownKey = 1, Name = "Male"},
+			new { DropdownKey = 1, Name = "Female"},
+			new { DropdownKey = 1, Name = "Prefer not to say"}
+		};
+		var newDropdowns = dropdowns.Where(s => !existingDropdowns.Contains(s.Name)).Select(d => new CommonDropDown
+		{
+			Name = d.Name,
+			DropDownKey = d.DropdownKey
+		}).ToList();
+
+		if (newDropdowns.Any())
+		{
+			context.AddRange(newDropdowns);
+			await context.SaveChangesAsync();
+		}
 	}
 }

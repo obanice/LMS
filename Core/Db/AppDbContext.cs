@@ -19,5 +19,7 @@ namespace Core.Db
         public DbSet<Screen> Screens { get; set; }
         public DbSet<ScreenRole> ScreenRoles { get; set; }
         public DbSet<StudyMaterial> StudyMaterials { get; set; }
+        public DbSet<CommonDropDown> CommonDropDowns { get; set; }
+        public DbSet<UserVerification> UserVerifications { get; set; }
     }
 }

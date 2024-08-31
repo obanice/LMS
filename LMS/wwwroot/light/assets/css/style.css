@@ -306,7 +306,7 @@ table.table td h2.table-avatar {
 	white-space: nowrap;
 }
 table.table td h2.table-avatar.blue-link a {
-	color: #007bff;
+	color: 366092;
 }
 table.table td h2 a {
 	color: #333;
@@ -537,8 +537,8 @@ table.dataTable thead > tr > td.sorting {
 .btn-primary.active,
 .btn-primary:active,
 .open > .dropdown-toggle.btn-primary {
-	background-color: #00b7ed;
-	border: 1px solid #00b7ed;
+	background-color: 366092;
+	border: 1px solid 366092;
 }
 .btn-primary.active.focus,
 .btn-primary.active:focus,
@@ -549,14 +549,14 @@ table.dataTable thead > tr > td.sorting {
 .open > .dropdown-toggle.btn-primary.focus,
 .open > .dropdown-toggle.btn-primary:focus,
 .open > .dropdown-toggle.btn-primary:hover {
-	background-color: #00b7ed;
-	border: 1px solid #00b7ed;
+	background-color: 366092;
+	border: 1px solid 366092;
 }
 .btn-primary.active:not(:disabled):not(.disabled),
 .btn-primary:active:not(:disabled):not(.disabled),
 .show > .btn-primary.dropdown-toggle {
-	background-color: #00b7ed;
-	border-color: #00b7ed;
+	background-color: 366092;
+	border-color: 366092;
 	color: #fff;
 }
 .btn-primary.active:focus:not(:disabled):not(.disabled), 
@@ -1811,8 +1811,8 @@ table.dataTable thead > tr > td.sorting {
 .add-btn:hover,
 .add-btn:focus,
 .add-btn:active {
-	background-color: #00b7ed;
-	border: 1px solid #00b7ed;
+	background-color: 366092;
+	border: 1px solid 366092;
     color: #fff;
 }
 .add-btn i {
@@ -3626,7 +3626,7 @@ table.dataTable thead > tr > td.sorting {
 	color: #366092;
 }
 .add-more a:hover {
-	color: #00b7ed;
+	color: 366092;
 }
 .avatar-box {
     float: left;
@@ -6202,7 +6202,7 @@ table.table-inbox tbody tr.checked {
 	margin-bottom: 30px;
 }
 .search-result u {
-	color: #00b7ed;
+	color: 366092;
 }
 .search-result p {
 	color: #777;
@@ -6289,13 +6289,13 @@ table.table-inbox tbody tr.checked {
     text-decoration: none;
 }
 .topics .topic-title a:hover {
-    color: #00b7ed;
+    color: 366092;
 }
 .topics .topic-title a span {
-    color: #00b7ed;
+    color: 366092;
 }
 .topics .topic-title a i {
-    color: #00b7ed;
+    color: 366092;
     margin-right: 5px;
 }
 .topics .topics-list {
@@ -6315,7 +6315,7 @@ table.table-inbox tbody tr.checked {
 	outline: 0 none;
 }
 .topics .topics-list li a:hover {
-	color: #00b7ed;
+	color: 366092;
 }
 .topics .topics-list li:before {
 	font-family: FontAwesome;
@@ -6370,7 +6370,7 @@ table.table-inbox tbody tr.checked {
     padding-left: 25px;
 }
 .widget-category li a:hover {
-    color: #00b7ed;
+    color: 366092;
 }
 .post {
     margin-bottom: 50px;
@@ -6418,10 +6418,10 @@ table.table-inbox tbody tr.checked {
     margin-bottom: 0;
 }
 .post .meta a {
-    color: #00b7ed;
+    color: 366092;
 }
 .widget .widget-title i {
-    color: #00b7ed;
+    color: 366092;
     font-size: 24px;
     margin-right: 10px;
 }

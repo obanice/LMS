@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using static Core.Enum.eLearningEnum;
+using static Core.Enum.LMSEnum;
 
 namespace Core.Models
 {

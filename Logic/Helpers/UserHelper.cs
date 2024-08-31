@@ -75,5 +75,29 @@ namespace Logic.Helpers
             }
             return false;
         }
-    }
+		public static string GetRoleLayout()
+		{
+			var loggedInUser = Utility.GetCurrentUser();
+			if (loggedInUser == null)
+			{
+				return Utility.Constants.DefaultLayout;
+			}
+			if (loggedInUser.Roles.Contains(Utility.Constants.SuperAdminRole))
+			{
+				return Utility.Constants.SuperAdminLayout;
+			}
+
+			if (loggedInUser.Roles.Contains(Utility.Constants.AdminRole))
+			{
+				return Utility.Constants.AdminLayout;
+			}
+
+			if (loggedInUser.Roles.Contains(Utility.Constants.LecturerRole))
+			{
+				return Utility.Constants.LecturerLayout;
+			}
+			return Utility.Constants.StudentLayout;
+		}
+
+	}
 }

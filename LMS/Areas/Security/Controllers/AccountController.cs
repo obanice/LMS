@@ -6,6 +6,7 @@ using Logic.Helpers;
 using Logic.IHelpers;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 using Serilog;
 
@@ -17,19 +18,22 @@ namespace LMS.Areas.Security.Controllers
         private readonly SignInManager<ApplicationUser> _signInManager;
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly IUserHelper _userHelper;
+        private readonly IEmailHelper emailHelper;
         private readonly AppDbContext db;
-        public AccountController(
-            UserManager<ApplicationUser> userManager,
-            IUserHelper userHelper, 
-            SignInManager<ApplicationUser> signInManager,
-            AppDbContext dbContext)
-        {
-            _userManager = userManager;
-            _userHelper = userHelper;
-            _signInManager = signInManager;
-            db = dbContext;
-        }
-        [HttpGet]
+		public AccountController(
+			UserManager<ApplicationUser> userManager,
+			IUserHelper userHelper,
+			SignInManager<ApplicationUser> signInManager,
+			AppDbContext dbContext,
+			IEmailHelper emailHelper)
+		{
+			_userManager = userManager;
+			_userHelper = userHelper;
+			_signInManager = signInManager;
+			db = dbContext;
+			this.emailHelper = emailHelper;
+		}
+		[HttpGet]
         public IActionResult Register()
         {
             return View();
@@ -130,5 +134,48 @@ namespace LMS.Areas.Security.Controllers
                 throw;
             }
         }
-    }
+
+		[HttpGet]
+		public IActionResult ResetPassword(Guid token)
+		{
+			if (token != Guid.Empty)
+			{
+				//var passwordResetViewmodel = new HomePageDto()
+				//{
+				//	Token = token,
+				//};
+				//return View(passwordResetViewmodel);
+			}
+			return View();
+		}
+
+		[HttpPost]
+		public async Task<JsonResult> ResetPassword(string passwordResetViewmodel)
+		{
+			var userdetail = JsonConvert.DeserializeObject<PasswordResetViewmodel>(passwordResetViewmodel);
+			if (userdetail != null)
+			{
+				if (userdetail.Password != userdetail.ConfirmPassword)
+				{
+					return Json(new { isError = true, msg = "Password and confirm password must match" });
+				}
+				var userVerification = await emailHelper.GetUserToken(userdetail.Token).ConfigureAwait(false);
+				if (userVerification != null && !userVerification.Used)
+				{
+					await _userManager.RemovePasswordAsync(userVerification.User).ConfigureAwait(false);
+					await _userManager.AddPasswordAsync(userVerification.User, userdetail.Password).ConfigureAwait(false);
+					await db.SaveChangesAsync().ConfigureAwait(false);
+					await emailHelper.MarkTokenAsUsed(userVerification).ConfigureAwait(false);
+
+					//var sendEmail = _emailHelper.PasswordResetConfirmation(userVerification.User);
+					//if (sendEmail)
+					//{
+					//	return Json(new { isError = false, msg = "Your Password has been reset successfully, you can now use the new password on your next login" });
+					//}
+					return Json(new { isError = true, mgs = "Sorry! The Link You Entered is Invalid or Expired " });
+				}
+			}
+			return Json(new { isError = true, mgs = "An error has occurred, try again. Please contact support if the error persists." });
+		}
+	}
 }

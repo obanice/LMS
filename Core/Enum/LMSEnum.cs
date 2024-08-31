@@ -2,7 +2,7 @@
 
 namespace Core.Enum
 {
-    public class eLearningEnum
+    public class LMSEnum
     {
         public enum Levels
         {
@@ -25,6 +25,11 @@ namespace Core.Enum
 			Lecturer = 1,
 			[Description("Student")]
 			Student = 2
+		}
+		public enum DropDownEnums
+		{
+			[Description("For returning Genders")]
+			Gender = 1,
 		}
 	}
 }

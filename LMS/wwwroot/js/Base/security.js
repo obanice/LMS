@@ -1,4 +1,6 @@
-﻿
+﻿$(function () {
+	$(".makeFilter").select2();
+});
 function registerUser() {
 	var defaultBtnValue = $('#submit_btn').html();
 	$('#submit_btn').html("Please wait...");
@@ -36,6 +38,7 @@ function registerUser() {
 	});
 }
 function login() {
+	debugger
 	var defaultBtnValue = $('#submit_btn').html();
 	$('#submit_btn').html("Please wait...");
 	$('#submit_btn').attr("disabled", true);

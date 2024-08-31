@@ -5,7 +5,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using static Core.Enum.eLearningEnum;
+using static Core.Enum.LMSEnum;
 
 namespace Core.Models
 {
@@ -17,7 +17,11 @@ namespace Core.Models
         public bool IsDeactivated { get; set; }
         public DateTime DateCreated { get; set; }
         public Levels? Level { get; set; }
-        public string? UserId { get; set; }
+		public bool IsDepartmentAdmin { get; set;}
+		public int? GenderId { get; set; }
+		[ForeignKey(nameof(GenderId))]
+		public virtual CommonDropDown? Gender { get; set; }
+		public string? UserId { get; set; }
         [ForeignKey(nameof(UserId))]
         public virtual ApplicationUser? User { get; set; }
         public int? DepartmentId { get; set; }

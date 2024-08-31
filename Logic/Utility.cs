@@ -97,6 +97,8 @@ public class Utility
 		public static string DefaultLayout = "~/Views/Shared/_HomeLayout.cshtml";
 		public static string SuperAdminLayout = "~/Views/Shared/_SuperAdminLayout.cshtml";
 		public static string AdminLayout = "~/Views/Shared/_AdminLayout.cshtml";
+		public static string LecturerLayout = "~/Views/Shared/_LecturerLayout.cshtml";
+		public static string StudentLayout = "~/Views/Shared/_StudentLayout.cshtml";
 		public static string DocumentSavePath = "PdfPrints";
 	}
 	public bool CheckAdminIsLogin()
