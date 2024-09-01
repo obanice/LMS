@@ -64,7 +64,7 @@ namespace LMS.Areas.SuperAdmin.Controllers
 			var userToken = await _emailHelper.CreateUserToken(departmentAdmin.Email).ConfigureAwait(false);
 			if (userToken != null)
 			{
-				return ResponseHelper.JsonError("School added successfully, but error occurred while adding school admin");
+				return ResponseHelper.JsonError("Admin added successfully, but error occurred while sending mail");
 			}
 			string linkToClick = HttpContext.Request.Scheme.ToString() + "://" + HttpContext.Request.Host.ToString() + "/Security/Account/ResetPassword?token=" + userToken.Token;
 			var sendEmail = _emailHelper.PasswordResetLink(departmentAdmin, linkToClick);

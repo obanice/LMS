@@ -15,7 +15,7 @@ namespace Core.ViewModels
 		public string? ConfirmPassword { get; set; }
 		public string? PhoneNumber { get; set; }
 		public int? DepartmentId { get; set; }
-		public Levels? Level { get; set; }
-        public string FullName => FirstName + " " + LastName;
+		public int? LevelId { get; set; }
+        public string? FullName { get; set; }
 	}
 }

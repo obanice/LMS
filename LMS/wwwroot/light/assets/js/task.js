@@ -58,7 +58,7 @@
 		var closeNewTaskPanel = function(){
 			$('.add-task-btn').toggleClass('visible');
 			$('.new-task-wrapper').toggleClass('visible');
-			if($('#new-task').hasClass('error')){
+			if ($('#new-task').hasClass('error')){
 				$('#new-task').removeClass('error');
 				$('.new-task-wrapper .error-message').addClass('hidden');
 			}
@@ -69,16 +69,16 @@
     var taskTemplate = '<li class="task"><div class="task-container"><span class="task-action-btn task-check"><span class="action-circle large complete-btn" title="Mark Complete"><i class="material-icons">check</i></span></span><span class="task-label" contenteditable="true"></span><span class="task-action-btn task-btn-right"><span class="action-circle large" title="Assign"><i class="material-icons">person_add</i></span> <span class="action-circle large delete-btn" title="Delete Task"><i class="material-icons">delete</i></span></span></div></li>';
     // Shows panel for entering new tasks
     $('.add-task-btn').click(function() {
-        var newTaskWrapperOffset = $('.new-task-wrapper').offset().top;
+		var newTaskWrapperOffset = $('.new-task-wrapper').offset().top;
         $(this).toggleClass('visible');
-        $('.new-task-wrapper').toggleClass('visible');
+		$('.new-task-wrapper').toggleClass('visible');
         // Focus on the text area for typing in new task
-        $('#new-task').focus();
+		$('#new-task').focus();
         // Smoothly scroll to the text area to bring the text are in view
         $('body').animate({
             scrollTop: newTaskWrapperOffset
         }, 1000);
-    });
+	});
 
 		// Deletes task on click of delete button
 		$('#task-list').on('click', '.task-action-btn .delete-btn', function(){
@@ -142,5 +142,30 @@
 			updateNotification('All tasks', 'marked as Incomplete.');
 		});
 
+		
+	//My test to know what the problem is
+		$('#add-task-btn2').click(function () {
+			
+			var newTaskWrapperOffset = $('#new-task-wrapper2').offset().top;
+			$(this).toggleClass('visible');
+			$('#new-task-wrapper2').toggle();
+			// Focus on the text area for typing in new task
+			$('#new-tasks2').focus();
+			// Smoothly scroll to the text area to bring the text are in view
+			$('body').animate({
+				scrollTop: newTaskWrapperOffset
+			}, 1000);
+		});
+
+		// Closes the panel for entering new tasks & shows the button for opening the panel
+		$(document).ready(function () {
+			$('#new-task-wrapper2').toggle();
+			if ($('#new-tasks2').hasClass('error')) {
+				$('#new-tasks2').removeClass('error');
+				$('#new-task-wrapper2 .error-message').addClass('hide');
+			}
+		});
+	     
+	
 	});
 }(jQuery))

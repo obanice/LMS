@@ -72,14 +72,12 @@ namespace Logic.Helpers
 				LastName = departmentDTO.LastName,
 				MiddleName = departmentDTO.MiddleName,
 				Email = departmentDTO.Email,
-				DateCreated =DateTime.Now,
-				IsDeactivated = false,
 				PhoneNumber = departmentDTO.PhoneNumber,
 				GenderId = departmentDTO.GenderId,
 				DepartmentId = departmentId,
 				IsDepartmentAdmin = true
 			};
-			var result = await _userManager.CreateAsync(applicationUser, "123456").ConfigureAwait(false);
+			var result = await _userManager.CreateAsync(applicationUser, "12345").ConfigureAwait(false);
 			if (result.Succeeded)
 			{
 				await _userManager.AddToRoleAsync(applicationUser, Utility.Constants.AdminRole).ConfigureAwait(false);

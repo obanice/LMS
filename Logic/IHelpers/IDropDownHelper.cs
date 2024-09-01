@@ -15,6 +15,7 @@ namespace Logic.IHelpers
 		List<CommonDropDown> GetDropDownByKey(DropDownEnums dropDownKey);
 		List<DropdownEnumModel> GetDropDownEnumList();
 		DropdownEnumModel GetEnumById(int enumkeyId);
+		List<ApplicationUserViewModel> GetLecturers();
 		List<ApplicationUserViewModel> GetUsers();
 	}
 }

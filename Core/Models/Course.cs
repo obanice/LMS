@@ -10,22 +10,22 @@ using static Core.Enum.LMSEnum;
 
 namespace Core.Models
 {
-    public class Course
+    public class Course:BaseModel
     {
-        [Key]
-        public int Id { get; set; }
-        public string? Name { get; set; }
         public string? Code { get; set; }
         public string? Description { get; set; }
-        public bool Active { get; set; }
-        public DateTime DateCreated { get; set; } = DateTime.Now;
         public int? DepartmentId { get; set; }
         [ForeignKey(nameof(DepartmentId))]
         public Department? Department { get; set; }
         public string? LecturerId { get; set; }
         [ForeignKey(nameof(LecturerId))]
         public ApplicationUser? Lecturer { get; set; }
-        public Semester? Semester { get; set; }
+        public int? SemesterId { get; set; }
+        [ForeignKey(nameof(SemesterId))]
+        public virtual CommonDropDown? Semester { get; set; }
+        public int? LevelId { get; set; }
+        [ForeignKey(nameof(LevelId))]
+        public virtual CommonDropDown? Level { get; set; }
         public ICollection<Module> Modules { get; set; }
         public ICollection<Enrollment> Enrollments { get; set; }
         public ICollection<StudyMaterial> StudyMaterials { get; set; }

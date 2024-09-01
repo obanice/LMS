@@ -64,7 +64,7 @@ namespace Logic.Helpers
             user.IsDeactivated = false;
             if (userDetails.Role == Utility.Constants.StudentRole)
             {
-                user.Level = userDetails.Level;
+                user.LevelId = userDetails.LevelId;
             }
             user.DepartmentId = userDetails.DepartmentId;
             var createUser = await _userManager.CreateAsync(user, userDetails.Password).ConfigureAwait(false);

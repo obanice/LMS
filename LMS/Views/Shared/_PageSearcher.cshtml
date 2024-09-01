@@ -1,0 +1,55 @@
+﻿@using Core.ViewModels
+@model Core.ViewModels.IIPageListModel
+
+<div class="card-box">
+    @using (Html.BeginForm(Model.SearchAction, Model.SearchController, FormMethod.Get, new { @class = "form-inline" }))
+    {
+        <div class="form-group">
+            <label class="focus-label">Keyword:</label>
+            <div class="col-md-3 col-sm-12 pl-1">
+                <div class="form-group">
+                    <input asp-for="Keyword" class="form-control" name="Keyword" placeholder="Search by keyword" />
+                </div>
+            </div>
+        </div>
+        @if (Model.CanFilterByDateRange)
+        {
+            <div class="form-group">
+                <label class="focus-label">From:</label>
+                <div class="col-md-2 mx-md-1 col-sm-12 pl-0">
+                    <div class="form-group">
+                        <input asp-for="StartDate" name="StartDate" type="date" class="form-control floating" />
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="focus-label ml-3">To:</label>
+                <div class="col-md-2 mx-md-1 col-sm-12 pl-0">
+                    <div class="form-group">
+                        <input asp-for="EndDate" name="EndDate" type="date" class="form-control floating" />
+                    </div>
+                </div>
+            </div>
+        }
+        <div class="mx-md-3 p-1 offse-1">
+            <button type="submit" class="btn btn-success mx-2" value="Search">Search</button>
+            <button type="submit" class="btn mx-1" style="background-color:#007bff;color:white" onclick="resetSearchFields(this);">Reset</button>
+        </div>
+    }
+</div>
+<script>
+    function resetSearchFields(button, resetHidden) {
+        debugger
+        var $form = $(button).parents('form');
+
+        $form.find('input[type=text],select').val('');
+        $form.find('input[type=date],select').val('');
+
+        if (resetHidden) {
+            $form.find('input[type=hidden]').val('');
+        }
+
+        return false;
+    }
+</script>

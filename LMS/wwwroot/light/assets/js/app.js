@@ -14,19 +14,21 @@ $(document).ready(function() {
 	
 	// Sidebar
 	
-	var Sidemenu = function() {
+	var Sidemenu = function () {
 		this.$menuItem = $('#sidebar-menu a');
 	};
 	
 	function init() {
 		var $this = Sidemenu;
-		$('#sidebar-menu a').on('click', function(e) {
+		$('#sidebar-menu a').on('click', function (e) {
 			if($(this).parent().hasClass('submenu')) {
 				e.preventDefault();
 			}
 			if(!$(this).hasClass('subdrop')) {
-				$('ul', $(this).parents('ul:first')).slideUp(350);
+			    $('ul', $(this).parents('ul:first')).slideUp(350);
 				$('a', $(this).parents('ul:first')).removeClass('subdrop');
+				$("#showNavStatic").slideDown(350);
+				$("#showNavStatic").addClass('subdrop');
 				$(this).next('ul').slideDown(350);
 				$(this).addClass('subdrop');
 			} else if($(this).hasClass('subdrop')) {
@@ -151,7 +153,6 @@ $(document).ready(function() {
 	if($('.datatable').length > 0) {
 		$('.datatable').DataTable({
 			"bFilter": false,
-			"aaSorting": []
 		});
 	}
 	
@@ -290,7 +291,7 @@ $(document).ready(function() {
 	
 	// Small Sidebar
 
-	$(document).on('click', '#toggle_btn', function() {
+	$(document).on('click', '#toggle_btn', function () {
 		if($('body').hasClass('mini-sidebar')) {
 			$('body').removeClass('mini-sidebar');
 			$('.subdrop + ul').slideDown();
@@ -302,6 +303,7 @@ $(document).ready(function() {
 	});
 	$(document).on('mouseover', function(e) {
 		e.stopPropagation();
+		
 		if($('body').hasClass('mini-sidebar') && $('#toggle_btn').is(':visible')) {
 			var targ = $(e.target).closest('.sidebar').length;
 			if(targ) {

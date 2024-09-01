@@ -1,9 +1,11 @@
-﻿using Core.Db;
+﻿using Core.Constants;
+using Core.Db;
 using Core.Models;
 using Core.ViewModels;
 using Logic.IHelpers;
 using Microsoft.EntityFrameworkCore;
 using static Core.Enum.LMSEnum;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
 namespace Logic.Helpers
 {
@@ -136,14 +138,37 @@ namespace Logic.Helpers
 				Id = 0,
 				Name = "-- Select --"
 			};
-			var schools = _context.Departments.Where(x => x.Active).Select(x => new DepartmentViewModel
-			{
-				Id = x.Id,
-				Name = x.Name,
-			}).ToList();
+			var schools = _context.Departments
+				.Where(x => x.Active)
+				.Select(x => new DepartmentViewModel
+				{
+					Id = x.Id,
+					Name = x.Name,
+				}).ToList();
 			schools.Insert(0, common);
 			return schools;
 		}
+		public List<ApplicationUserViewModel> GetLecturers()
+		{
+			var common = new ApplicationUserViewModel()
+			{
+				Id = "",
+				FullName = "-- Select --"
+			};
+			var users = _context.ApplicationUsers
+				.Where(x => !x.IsDeactivated && _context.UserRoles
+					.Any(ur => ur.UserId == x.Id && ur.RoleId == LMSConstants.LecturerRoleId))
+				.Select(x => new ApplicationUserViewModel
+				{
+					Id = x.Id,
+					FullName = x.FullName,
+				})
+				.ToList();
+			users.Insert(0, common);
+
+			return users;
+		}
+
 	}
 	public class drp
 	{

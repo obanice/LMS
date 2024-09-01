@@ -11,17 +11,28 @@ namespace Core.Models
 {
     public class ApplicationUser : IdentityUser
     {
+        public ApplicationUser()
+        {
+            IsDeactivated = false;
+            DateCreated = DateTime.Now;
+            IsDepartmentAdmin = false;
+        }
         public string? FirstName { get; set; }
         public string? LastName { get; set; }
         public string? MiddleName { get; set; }
         public bool IsDeactivated { get; set; }
         public DateTime DateCreated { get; set; }
-        public Levels? Level { get; set; }
 		public bool IsDepartmentAdmin { get; set;}
 		public int? GenderId { get; set; }
 		[ForeignKey(nameof(GenderId))]
 		public virtual CommonDropDown? Gender { get; set; }
-		public string? UserId { get; set; }
+        public int? LevelId { get; set; }
+        [ForeignKey(nameof(LevelId))]
+        public virtual CommonDropDown? Level { get; set; }
+        public int? SemesterId { get; set; }
+        [ForeignKey(nameof(SemesterId))]
+        public virtual CommonDropDown? Semester { get; set; }
+        public string? UserId { get; set; }
         [ForeignKey(nameof(UserId))]
         public virtual ApplicationUser? User { get; set; }
         public int? DepartmentId { get; set; }
