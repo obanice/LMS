@@ -86,5 +86,68 @@ namespace Logic.Helpers
 			}
 			return new ApplicationUser();
 		}
+		public IPagedList<CourseViewModel> Courses(IPageListModel<CourseViewModel> model, int? departmentId, int page)
+		{
+			var query = db.Courses
+					.Where(p => p.Active && p.DepartmentId == departmentId)
+					.Include(x => x.Lecturer)
+					.Include(x => x.Department)
+					.Include(x => x.Semester)
+					.Include(x => x.Level)
+					.AsQueryable();
+			if (!query.Any())
+			{
+				return new List<CourseViewModel>().ToPagedList(page, 25);
+			}
+			if (!string.IsNullOrEmpty(model.Keyword))
+			{
+				query = query.Where(v =>
+						v.Code.ToLower().Contains(model.Keyword.ToLower()) ||
+						v.Name.ToLower().Contains(model.Keyword.ToLower()) ||
+						v.Description.ToLower().Contains(model.Keyword.ToLower()) ||
+						v.Lecturer.FirstName.ToLower().Contains(model.Keyword.ToLower()) ||
+						v.Department.Name.Contains(model.Keyword.ToLower()));
+			}
+			if (model.StartDate.HasValue)
+			{
+				query = query.Where(v => v.DateCreated >= model.StartDate);
+			}
+
+			if (model.EndDate.HasValue)
+			{
+				query = query.Where(v => v.DateCreated <= model.EndDate);
+			}
+			var courses = query
+				.OrderByDescending(v => v.DateCreated)
+				.Select(v => new CourseViewModel
+				{
+					Id = v.Id,
+					Name = v.Name,
+					Code = v.Code,
+					Description = v.Description,
+					LecturerName = v.Lecturer.FullName,
+					Department = v.Department.Name
+				})
+				.ToPagedList(page, 25);
+			model.Model = courses;
+			return courses;
+
+		}
+
+		public bool AddCourse(CourseViewModel courseViewModel)
+		{
+			var course = new Course
+			{
+				Name = courseViewModel.Name,
+				Code = courseViewModel.Code,
+				Description = courseViewModel.Description,
+				LecturerId = courseViewModel.LecturerId,
+				SemesterId = courseViewModel.SemesterId,
+				DepartmentId = courseViewModel.DepartmentId,
+			};
+			db.Add(course);
+			db.SaveChanges();
+			return true;
+		}
 	}
 }

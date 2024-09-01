@@ -28,8 +28,9 @@ namespace Core.Enum
 		}
 		public enum DropDownEnums
 		{
-			[Description("For returning Genders")]
 			Gender = 1,
+			Level = 2,
+			Semester = 3,
 		}
 	}
 }

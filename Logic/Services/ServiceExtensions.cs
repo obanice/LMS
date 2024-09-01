@@ -258,7 +258,12 @@ public static class ServiceExtensions
 		{
 			new { DropdownKey = 1, Name = "Male"},
 			new { DropdownKey = 1, Name = "Female"},
-			new { DropdownKey = 1, Name = "Prefer not to say"}
+			new { DropdownKey = 1, Name = "Prefer not to say"},
+			new { DropdownKey = 2, Name = "100"},
+			new { DropdownKey = 2, Name = "200"},
+			new { DropdownKey = 2, Name = "300"},
+			new { DropdownKey = 3, Name = "Harmattan "},
+			new { DropdownKey = 3, Name = "Rain"}
 		};
 		var newDropdowns = dropdowns.Where(s => !existingDropdowns.Contains(s.Name)).Select(d => new CommonDropDown
 		{

@@ -11,7 +11,9 @@ namespace Logic.IHelpers
 {
 	public interface IAdminHelper
 	{
+		bool AddCourse(CourseViewModel courseViewModel);
 		Task<ApplicationUser> AddLecturer(LecturerViewModel lecturerViewModel);
+		IPagedList<CourseViewModel> Courses(IPageListModel<CourseViewModel> model, int? departmentId, int page);
 		IPagedList<LecturerViewModel> Lectures(IPageListModel<LecturerViewModel> model, int? departmentId, int page);
 	}
 }

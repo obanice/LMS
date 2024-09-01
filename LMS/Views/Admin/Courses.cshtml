@@ -1,8 +1,8 @@
 ﻿@using Core
 @using Core.ViewModels;
-@model Core.ViewModels.IPageListModel<LecturerViewModel>
+@model Core.ViewModels.IPageListModel<CourseViewModel>
 @{
-    ViewData["Title"] = "Lecturers";
+    ViewData["Title"] = "Courses";
     Layout = ViewBag.Layout;
     ViewData["CustomActionName"] = Model.SearchAction;
 }
@@ -26,14 +26,14 @@
 		<div class="page-header">
 			<div class="row align-items-center">
 				<div class="col">
-					<h3 class="page-title">Lecturers</h3>
+					<h3 class="page-title">Courses</h3>
 					<ul class="breadcrumb">
 						<li class="breadcrumb-item"><a href="#">Dashboard</a></li>
-						<li class="breadcrumb-item active">Lecturer</li>
+						<li class="breadcrumb-item active">Course</li>
 					</ul>
 				</div>
-				<div class="col-auto float-right ml-auto" id="supplierAdd">
-					<a href="#" class="btn add-btn" data-toggle="modal" data-target="#add_lecturer"><i class="fa fa-plus"></i> Add Lecturer</a>
+				<div class="col-auto float-right ml-auto">
+					<a href="#" class="btn add-btn" data-toggle="modal" data-target="#add_course"><i class="fa fa-plus"></i> Add Course</a>
 				</div>
 			</div>
 		</div>
@@ -47,28 +47,28 @@
 					<thead>
 						<tr>
 							<th>S/N</th>
-							<th>Full Name</th>
-							<th>PhoneNumber</th>
-							<th>Email</th>
-							<th>Gender</th>
-							<th>Courses</th>
+							<th>Code</th>
+							<th>Name</th>
+							<th>Description</th>
+							<th>Lecturer</th>
+							<th>Level</th>
+							<th>Semester</th>
 							<th class="text-right no-sort">Action</th>
 						</tr>
 					</thead>
 					<tbody>
 						@if (Model.Model != null)
 						{
-							@foreach (var lecturer in Model.Model)
+							@foreach (var course in Model.Model)
 							{
 								<tr>
 									<td></td>
-									<td>@lecturer.FullName</td>
-									<td>@lecturer.PhoneNumber</td>
-									<td>@lecturer.Email</td>
-									<td>@lecturer.Gender</td>
-									<td>
-										<a asp-route-id="@lecturer.Department" asp-controller="Admin" asp-action="LecturerCourse" class="btn add-btn text-white"><i class="fa fa-users"></i>Courses</a>
-									</td>
+									<td>@course.Code</td>
+									<td>@course.Name</td>
+									<td>@course.Description</td>
+									<td>@course.LecturerName</td>
+									<td>@course.Level</td>
+									<td>@course.Semester</td>
 									<td class="text-right">
 										<div class="dropdown dropdown-action">
 											<a href="#" class="action-icon dropdown-toggle" data-toggle="dropdown" aria-expanded="false"><i class="material-icons">more_vert</i></a>
@@ -90,11 +90,11 @@
 	@Html.Partial("_Pager", Model.Model)
 </div>
 
-<div id="add_lecturer" class="modal custom-modal fade" role="dialog">
+<div id="add_course" class="modal custom-modal fade" role="dialog">
 	<div class="modal-dialog modal-dialog-centered modal-lg">
 		<div class="modal-content">
 			<div class="modal-header">
-				<h5 class="modal-title">Add Lecturer</h5>
+				<h5 class="modal-title">Add Course</h5>
 				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
 					<span aria-hidden="true">&times;</span>
 				</button>
@@ -103,46 +103,46 @@
 				<div class="row">
 					<div class="col-sm-6">
 						<div class="form-group">
-							<label class="col-form-label">First Name <span class="text-danger">*</span></label>
-							<input class="form-control" id="firstName" type="text">
+							<label class="col-form-label">Code<span class="text-danger">*</span></label>
+							<input class="form-control" id="code" type="text">
 						</div>
 					</div>
 					<div class="col-sm-6">
 						<div class="form-group">
-							<label class="col-form-label">Middle Name</label>
-							<input class="form-control" id="middleName" type="text">
+							<label class="col-form-label">Name</label>
+							<input class="form-control" id="name" type="text">
 						</div>
 					</div>
 					<div class="col-sm-6">
 						<div class="form-group">
-							<label class="col-form-label">Last Name</label>
-							<input class="form-control" id="lastName" type="text">
-						</div>
-					</div>
-					<div class="col-sm-6">
-						<div class="form-group">
-							<label class="col-form-label">Email <span class="text-danger">*</span></label>
-							<input class="form-control" id="email" type="email">
-						</div>
-					</div>
-
-					<div class="col-sm-6">
-						<div class="form-group">
-							<label class="col-form-label">Phone </label>
-							<input class="form-control" id="phone" type="text">
+							<label class="col-form-label">Description</label>
+							<input class="form-control" id="description" type="text">
 						</div>
 					</div>
 					<div class="col-md-6">
 						<div class="form-group">
-							<label>Gender <span class="text-danger">*</span></label>
-							<select id="genderId" style="width:100%" asp-items="@(new SelectList(ViewBag.Gender ,"Id", "Name" ))" class="form-control makeFilter"> </select>
+							<label>Lecturer <span class="text-danger">*</span></label>
+							<select id="lecturerId" style="width:100%" asp-items="@(new SelectList(ViewBag.Lecturer ,"Id", "FullName" ))" class="form-control makeFilter"> </select>
+						</div>
+					</div>
+					<div class="col-md-6">
+						<div class="form-group">
+							<label>Level <span class="text-danger">*</span></label>
+							<select id="levelId" style="width:100%" asp-items="@(new SelectList(ViewBag.Level ,"Id", "Name" ))" class="form-control makeFilter"> </select>
+						</div>
+					</div>
+					<div class="col-md-6">
+						<div class="form-group">
+							<label>Semester <span class="text-danger">*</span></label>
+							<select id="semesterId" style="width:100%" asp-items="@(new SelectList(ViewBag.Semester ,"Id", "Name" ))" class="form-control makeFilter"> </select>
 						</div>
 					</div>
 				</div>
 				<div class="submit-section">
-					<button class="btn btn-primary submit-btn" onclick="addLecturer()">Add</button>
+					<button class="btn btn-primary submit-btn" onclick="addCourse()">Add</button>
 				</div>
 			</div>
 		</div>
 	</div>
 </div>
+

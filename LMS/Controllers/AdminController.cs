@@ -30,7 +30,6 @@ namespace LMS.Controllers
 		public IActionResult Lecturers(IPageListModel<LecturerViewModel>? model, int page = 1)
 		{
 			ViewBag.Layout = UserHelper.GetRoleLayout();
-			ViewBag.Department = _dropDownHelper.GetDepartments();
 			ViewBag.Lecturer = _dropDownHelper.GetLecturers();
 			ViewBag.Gender = _dropDownHelper.GetDropDownByKey(DropDownEnums.Gender);
 			var lecturers = _adminHelper.Lectures(model, CurrentUserDepartmentId, page);
@@ -62,7 +61,7 @@ namespace LMS.Controllers
 				var userToken = await _emailHelper.CreateUserToken(lecturer.Email).ConfigureAwait(false);
 				if (userToken != null)
 				{
-					return ResponseHelper.JsonError("lecturer added successfully, but error occurred while sending mail");
+					return ResponseHelper.JsonError("Lecturer added successfully, but error occurred while sending mail");
 				}
 				string linkToClick = HttpContext.Request.Scheme.ToString() + "://" + HttpContext.Request.Host.ToString() + "/Security/Account/ResetPassword?token=" + userToken.Token;
 				var sendEmail = _emailHelper.PasswordResetLink(lecturer, linkToClick);
@@ -73,6 +72,46 @@ namespace LMS.Controllers
 				LogCritical($"An error occurred when trying to add lecturer with {ex.Message ?? ex.InnerException?.Message}");
 				throw;
 			}
+		}
+
+		[HttpGet]
+		public IActionResult Courses(IPageListModel<CourseViewModel>? model, int page = 1)
+		{
+			ViewBag.Layout = UserHelper.GetRoleLayout();
+			ViewBag.Lecturer = _dropDownHelper.GetLecturers();
+			ViewBag.Level = _dropDownHelper.GetDropDownByKey(DropDownEnums.Level);
+			ViewBag.Semester = _dropDownHelper.GetDropDownByKey(DropDownEnums.Semester);
+			var courses = _adminHelper.Courses(model, CurrentUserDepartmentId, page);
+			model.Model = courses;
+			model.SearchAction = "Courses";
+			model.SearchController = "Admin";
+			return View(model);
+		}
+
+		[HttpPost]
+		public JsonResult AddCourse(string courseDetails)
+		{
+			try
+			{
+				if (string.IsNullOrEmpty(courseDetails))
+				{
+					return ResponseHelper.JsonError("Error occurred");
+				}
+				var courseViewModel = JsonConvert.DeserializeObject<CourseViewModel>(courseDetails);
+				if (courseViewModel == null)
+				{
+					return ResponseHelper.JsonError("Error occurred");
+				}
+				courseViewModel.DepartmentId = CurrentUserDepartmentId;
+				var isCourseAdded = _adminHelper.AddCourse(courseViewModel);
+				return isCourseAdded ? ResponseHelper.JsonSuccess("Course added successfully") : ResponseHelper.JsonError("Unable to create course");
+			}
+			catch (Exception ex)
+			{
+				LogCritical($"An error occurred when trying to add course with {ex.Message ?? ex.InnerException?.Message}");
+				throw;
+			}
+
 		}
 	}
 }
