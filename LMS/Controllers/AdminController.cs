@@ -2,10 +2,12 @@
 using LMS.Models;
 using Logic.Helpers;
 using Logic.IHelpers;
+using Logic.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http.Extensions;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
+using System.Net.Http.Headers;
 using static Core.Enums.LMSEnum;
 using static Logic.AppHttpContext;
 
@@ -18,14 +20,17 @@ namespace LMS.Controllers
 		private readonly IAdminHelper _adminHelper;
 		private readonly IDropDownHelper _dropDownHelper;
 		private readonly IEmailHelper _emailHelper;
+		private readonly IMediaService _mediaService;
 		public AdminController(
 			IAdminHelper adminHelper, 
 			IDropDownHelper dropDownHelper,
-			IEmailHelper emailHelper)
+			IEmailHelper emailHelper,
+			IMediaService mediaService)
 		{
 			_adminHelper = adminHelper;
 			_dropDownHelper = dropDownHelper;
 			_emailHelper = emailHelper;
+			_mediaService = mediaService;
 		}
 		public IActionResult Index()
 		{
@@ -137,8 +142,23 @@ namespace LMS.Controllers
 		public IActionResult Materials(int? courseId)
 		{
 			ViewBag.Layout = UserHelper.GetRoleLayout();
+			ViewBag.CourseId = courseId;
 			var studyMaterials = _adminHelper.GetStudyMaterialsByCoursesById(courseId);
 			return View(studyMaterials);
+		}
+		[HttpPost]
+		[DisableRequestSizeLimit]
+		public async Task<JsonResult> AddMaterials(int? courseId, IFormFile file)
+		{
+			if (courseId == 0 || file == null)
+			{
+				return ResponseHelper.JsonError("Error occurred");
+			}
+			var fileName = ContentDispositionHeaderValue.Parse(file.ContentDisposition).FileName?.Trim('"');
+			var media = await _mediaService.SaveMediaAsync(file.OpenReadStream(), fileName, Utility.Constants.StudyMaterials, _mediaService.GetMediaType(fileName)).ConfigureAwait(false);
+			var mediaId = media.Id;
+			var isMaterialSaved = _adminHelper.AddMaterial(courseId,mediaId);
+			return isMaterialSaved ? ResponseHelper.JsonSuccess($"Saved successfully") : ResponseHelper.JsonError($"Unable to save material");
 		}
 	}
 }

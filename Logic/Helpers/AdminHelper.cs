@@ -172,17 +172,27 @@ namespace Logic.Helpers
 		}
 		public List<StudyMaterialViewModel> GetStudyMaterialsByCoursesById(int?  courseId)
 		{
-			return GetByPredicate<StudyMaterial>(x => x.Id == courseId)
+			return GetByPredicate<StudyMaterial>(x => x.CourseId == courseId)
 				.Include(x => x.MediaType)
 				.Include(x => x.Course)
 				.Select(v => new StudyMaterialViewModel
 				{
 					Id = v.Id,
-					CourseCode = v.Course.Code,
+					CourseId = v.CourseId,
+					Name = v.MediaType.Name,
 					File = v.MediaType.PhysicalPath,
 					Date = v.DateCreated.ToFormattedDate(),
 					FileExtension = v.MediaType.MediaType.GetEnumDescription()
 				}).ToList();
+		}
+		public bool AddMaterial(int? courseId, int? mediaId)
+		{
+			var materia = new StudyMaterial
+			{
+				CourseId = courseId,
+				MediaTypeId = mediaId,
+			};
+			return Create<StudyMaterial, StudyMaterial>(materia);
 		}
 	}
 }

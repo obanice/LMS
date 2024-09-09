@@ -1,7 +1,8 @@
-﻿
+﻿@model IEnumerable<Core.ViewModels.StudyMaterialViewModel>
 @{
-    ViewData["Title"] = "Materials";
+	ViewData["Title"] = "Materials";
 	Layout = ViewBag.Layout;
+	var courseId = ViewBag.CourseId;
 }
 <!-- Page Wrapper -->
 <div class="page-wrapper">
@@ -9,13 +10,13 @@
 	<!-- Page Content -->
 	<div class="content container-fluid">
 
-		<div class="file-wrap">
+		<div class="file-wrap" style="display:block;">
 			<div class="file-cont-wrap" style="margin-left:0px!important;">
 				<div class="file-cont-inner">
 					<div class="file-cont-header">
 						<span>File Manager</span>
 						<div class="file-options">
-							<span class="btn-file"><input type="file" class="upload"><i class="fa fa-upload"></i></span>
+							<span class="btn-file" data-toggle="modal" data-target="#add_material"><i class="fa fa-upload"></i></span>
 						</div>
 					</div>
 					<div class="file-content">
@@ -41,16 +42,23 @@
 														<div class="dropdown-file">
 															<a href="" class="dropdown-link" data-toggle="dropdown"><i class="fa fa-ellipsis-v"></i></a>
 															<div class="dropdown-menu dropdown-menu-right">
-																<a href="#" class="dropdown-item">Download</a>
+																<a href="@studyMaterial.File" class="dropdown-item">Download</a>
 																<a href="#" class="dropdown-item">Rename</a>
 																<a href="#" class="dropdown-item">Delete</a>
 															</div>
 														</div>
 														<div class="card-file-thumb">
-															<i class=$"fa fa-file-{@studyMaterial.FileExtension}File-o"></i>
+															@if (@studyMaterial.FileExtension.ToLower().Contains("doc"))
+															{
+																<i class="fa fa-file-word-o"></i>
+															}
+															else
+															{
+																<i class="fa fa-file-@studyMaterial.FileExtension?.ToLower()-o"></i>	
+															}
 														</div>
 														<div class="card-body">
-															<h6><a href="">@studyMaterial.File</a></h6>
+															<h6><a href="">@studyMaterial.Name</a></h6>
 															<span>12mb</span>
 														</div>
 														<div class="card-footer">@studyMaterial.Date</div>
@@ -69,6 +77,27 @@
 		</div>
 	</div>
 	<!-- /Page Content -->
+	<div id="add_material" class="modal custom-modal fade" role="dialog">
+		<div class="modal-dialog modal-dialog-centered modal-md" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title">Add File</h5>
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+				</div>
+				<div class="modal-body">
+					<div class="form-group">
+						<label>Upload File</label>
+						<input class="form-control" type="file" id="fileUrl">
+					</div>
 
+					<div class="submit-section">
+						<button class="btn btn-primary submit-btn" onclick="addFile('@courseId')">Add File</button>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
 </div>
 <!-- /Page Wrapper -->
