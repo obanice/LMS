@@ -53,6 +53,7 @@
 							<th>Lecturer</th>
 							<th>Level</th>
 							<th>Semester</th>
+							<th>Study Materials</th>
 							<th class="text-right no-sort">Action</th>
 						</tr>
 					</thead>
@@ -69,6 +70,9 @@
 									<td>@course.LecturerName</td>
 									<td>@course.Level</td>
 									<td>@course.Semester</td>
+									<td>
+												<a asp-route-courseId="@course.Id" asp-controller="Admin" asp-action="Materials" class="btn add-btn text-white"><i class="fa fa-book"></i>Materials</a>
+									</td>
 									<td class="text-right">
 										<div class="dropdown dropdown-action">
 											<a href="#" class="action-icon dropdown-toggle" data-toggle="dropdown" aria-expanded="false"><i class="material-icons">more_vert</i></a>

@@ -12,7 +12,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Areas\Lecturer\Controllers\" />
     <Folder Include="Areas\Lecturer\Data\" />
     <Folder Include="Areas\Lecturer\Models\" />
     <Folder Include="Areas\Security\Data\" />

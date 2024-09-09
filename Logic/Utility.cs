@@ -59,7 +59,7 @@ namespace Logic
             public override void OnActionExecuting(ActionExecutingContext filterContext)
             {
                 HttpContext ctx = AppHttpContext.Current;
-                if (Current.Session.GetString("loggedInUser") == null || Current.Session.GetString("garageSystemSettings") == null)
+                if (Current.Session.GetString("loggedInUser") == null)
                 {
                     filterContext.Result = new RedirectResult("~/Security/Account/Login");
                     return;
@@ -99,7 +99,7 @@ public class Utility
 		public static string AdminLayout = "~/Views/Shared/_AdminLayout.cshtml";
 		public static string LecturerLayout = "~/Views/Shared/_LecturerLayout.cshtml";
 		public static string StudentLayout = "~/Views/Shared/_StudentLayout.cshtml";
-		public static string DocumentSavePath = "PdfPrints";
+		public static string StudyMaterials = "StudyMaterials";
 	}
 	public bool CheckAdminIsLogin()
 	{

@@ -9,11 +9,11 @@ namespace Logic.Helpers
 	public class EmailHelper : IEmailHelper
 	{
 		private readonly IUserHelper _userHelper;
-		private readonly IEmailService _emailService;
+		private readonly IEmailSender _emailService;
 		private readonly AppDbContext _context;
 		public EmailHelper(AppDbContext context,
 			IUserHelper userHelper, 
-			IEmailService emailService)
+			IEmailSender emailService)
 		{
 			_context = context;
 			_emailService = emailService;

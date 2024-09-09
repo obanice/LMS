@@ -5,7 +5,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using static Core.Enum.LMSEnum;
+using static Core.Enums.LMSEnum;
 
 namespace Core.ViewModels
 {
@@ -24,7 +24,7 @@ namespace Core.ViewModels
 		public string? LastName { get; set; }
 		public string? MiddleName { get; set; }
 		public string? PhoneNumber { get; set; }
-		public Levels? Level { get; set; }
+		public int? LevelId { get; set; }
 		public int? GenderId { get; set; }
 		public string? UserId { get; set; }
 		public int? DepartmentId { get; set; }

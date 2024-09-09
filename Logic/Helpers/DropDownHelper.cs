@@ -3,9 +3,7 @@ using Core.Db;
 using Core.Models;
 using Core.ViewModels;
 using Logic.IHelpers;
-using Microsoft.EntityFrameworkCore;
-using static Core.Enum.LMSEnum;
-using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
+using static Core.Enums.LMSEnum;
 
 namespace Logic.Helpers
 {

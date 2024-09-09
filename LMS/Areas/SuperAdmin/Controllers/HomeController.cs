@@ -1,7 +1,7 @@
 ﻿using Core.Db;
 using Core.Models;
 using Core.ViewModels;
-using static Core.Enum.LMSEnum.DropDownEnums;
+using static Core.Enums.LMSEnum.DropDownEnums;
 using Logic.IHelpers;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;

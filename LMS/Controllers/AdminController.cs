@@ -2,12 +2,17 @@
 using LMS.Models;
 using Logic.Helpers;
 using Logic.IHelpers;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http.Extensions;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
-using static Core.Enum.LMSEnum;
+using static Core.Enums.LMSEnum;
+using static Logic.AppHttpContext;
 
 namespace LMS.Controllers
 {
+	[Authorize]
+	[SessionTimeout]
 	public class AdminController : BaseController
 	{
 		private readonly IAdminHelper _adminHelper;
@@ -53,6 +58,10 @@ namespace LMS.Controllers
 					return ResponseHelper.JsonError("Error occurred");
 				}
 				lecturerViewModel.Department = CurrentUserDepartmentId;
+				if (CurrentUserDepartmentId == 0 || CurrentUserDepartmentId == null)
+				{
+					return ResponseHelper.JsonError("Error occurred");
+				}
 				var lecturer = await _adminHelper.AddLecturer(lecturerViewModel).ConfigureAwait(false);
 				if (lecturer == null)
 				{
@@ -81,7 +90,7 @@ namespace LMS.Controllers
 			ViewBag.Lecturer = _dropDownHelper.GetLecturers();
 			ViewBag.Level = _dropDownHelper.GetDropDownByKey(DropDownEnums.Level);
 			ViewBag.Semester = _dropDownHelper.GetDropDownByKey(DropDownEnums.Semester);
-			var courses = _adminHelper.Courses(model, CurrentUserDepartmentId, page);
+			var courses = _adminHelper.Courses(model, CurrentUserDepartmentId, string.Empty, page);
 			model.Model = courses;
 			model.SearchAction = "Courses";
 			model.SearchController = "Admin";
@@ -112,6 +121,24 @@ namespace LMS.Controllers
 				throw;
 			}
 
+		}
+		public IActionResult LecturerCourse(IPageListModel<CourseViewModel>? model,string lecturerId, int page = 1)
+		{
+			ViewBag.Layout = UserHelper.GetRoleLayout();
+			ViewBag.Lecturer = _dropDownHelper.GetLecturers();
+			ViewBag.Gender = _dropDownHelper.GetDropDownByKey(DropDownEnums.Gender);
+			var courses = _adminHelper.Courses(model, 0, lecturerId, page,false);
+			model.Model = courses;
+			ViewBag.LecturerName = courses?.FirstOrDefault()?.LecturerName;
+			model.SearchAction = "LecturerCourse";
+			model.SearchController = "Admin";
+			return View(model);
+		}
+		public IActionResult Materials(int? courseId)
+		{
+			ViewBag.Layout = UserHelper.GetRoleLayout();
+			var studyMaterials = _adminHelper.GetStudyMaterialsByCoursesById(courseId);
+			return View(studyMaterials);
 		}
 	}
 }

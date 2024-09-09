@@ -1,7 +1,6 @@
-﻿using Core.Enum;
-using Core.Models;
+﻿using Core.Models;
 using Core.ViewModels;
-using static Core.Enum.LMSEnum;
+using static Core.Enums.LMSEnum;
 using static Logic.Helpers.DropDownHelper;
 
 namespace Logic.IHelpers

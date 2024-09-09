@@ -21,7 +21,7 @@ function addLecturer() {
 		},
 		success: function (result) {
 			if (!result.isError) {
-				var url = '/Adimin/Lecturers';
+				var url = '/Admin/Lecturers';
 				successAlertWithRedirect(result.msg, url);
 			}
 			else {
@@ -59,7 +59,7 @@ function addCourse() {
 		},
 		success: function (result) {
 			if (!result.isError) {
-				var url = '/Adimin/Courses';
+				var url = '/Admin/Courses';
 				successAlertWithRedirect(result.msg, url);
 			}
 			else {

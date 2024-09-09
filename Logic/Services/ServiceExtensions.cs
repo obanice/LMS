@@ -3,6 +3,7 @@ using Core.Models;
 using Hangfire;
 using Hangfire.Common;
 using Hangfire.Dashboard;
+using Hangfire.SqlServer;
 using Hangfire.States;
 using Hangfire.Storage;
 using Logic;
@@ -28,14 +29,17 @@ public static class ServiceExtensions
 		services.AddScoped<IDropDownHelper, DropDownHelper>();
 		services.AddScoped<ISuperAdminHelper, SuperAdminHelper>();
 		services.AddScoped<IEmailHelper, EmailHelper>();
-		services.AddScoped<IEmailService, EmailService>();
+		services.AddScoped<IEmailSender, EmailSender>();
+		services.AddScoped<ILecturerHelper, LecturerHelper>();
+		services.AddScoped<IMediaService, MediaService>();
+		services.AddScoped<IFileManager, FileManager>();
 
 		return services;
 	}
 
 	public static IServiceCollection ConfigureAppSettings(this IServiceCollection services, IConfiguration configuration)
 	{
-		services.AddSingleton<IEmailConfiguration>(configuration.GetSection("EmailConfiguration").Get<EmailConfiguration>());
+		services.AddSingleton<Logic.Services.IEmailConfiguration>(configuration.GetSection("EmailConfiguration").Get<Logic.Services.EmailConfiguration>());
 		//services.AddSingleton<IGeneralConfiguration>(configuration.GetSection("GeneralConfiguration").Get<GeneralConfiguration>());
 
 		return services;
@@ -113,31 +117,27 @@ public static class ServiceExtensions
 		}
 	}
 
-	public static IApplicationBuilder UseHangFireConfiguration(this IApplicationBuilder app)
-	{
-		var dashboardOptions = new DashboardOptions
-		{
-			Authorization = new[] { new MyAuthorizationFilter() }
-		};
-        AppHttpContext.Services = app.ApplicationServices;
-        app.UseHangfireDashboard("/LMSHangFire", dashboardOptions);
-
-		var connectionString = app.ApplicationServices.GetService<IConfiguration>().GetConnectionString("HangfireConnectionString");
-
-		GlobalConfiguration.Configuration.UseSqlServerStorage(connectionString);
-
-		JobStorage.Current = JobStorage.Current;
-
-        app.UseEndpoints(endpoints =>
+    public static IApplicationBuilder UseHangFireConfiguration(this IApplicationBuilder app)
+    {
+        var options = new BackgroundJobServerOptions
         {
-            endpoints.MapControllerRoute(
-              name: "areas",
-              pattern: "{area:exists}/{controller=Home}/{action=Index}/{id?}"
-            );
-        });
-        return app;
-	}
+            ServerName = $"{Environment.MachineName}.{Guid.NewGuid()}"
+        };
 
+        app.UseHangfireServer(options);
+
+        var robotStorage = new SqlServerStorage(app.ApplicationServices.GetService<IConfiguration>().GetConnectionString("HangfireConnectionString"));
+        JobStorage.Current = robotStorage;
+
+        var dashboardOptions = new DashboardOptions
+        {
+            Authorization = new[] { new MyAuthorizationFilter() }
+        };
+        AppHttpContext.Services = app.ApplicationServices;
+        app.UseHangfireDashboard("/LMSHangFire", dashboardOptions, robotStorage);
+
+        return app;
+    }
 
 	public static async Task SeedScreensAsync(AppDbContext context)
 	{

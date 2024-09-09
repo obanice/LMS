@@ -13,7 +13,8 @@ namespace Logic.IHelpers
 	{
 		bool AddCourse(CourseViewModel courseViewModel);
 		Task<ApplicationUser> AddLecturer(LecturerViewModel lecturerViewModel);
-		IPagedList<CourseViewModel> Courses(IPageListModel<CourseViewModel> model, int? departmentId, int page);
+		IPagedList<CourseViewModel> Courses(IPageListModel<CourseViewModel> model, int? departmentId, string lecturerId, int page, bool isLecturerCourse = false);
+		List<StudyMaterialViewModel> GetStudyMaterialsByCoursesById(int? courseId);
 		IPagedList<LecturerViewModel> Lectures(IPageListModel<LecturerViewModel> model, int? departmentId, int page);
 	}
 }
