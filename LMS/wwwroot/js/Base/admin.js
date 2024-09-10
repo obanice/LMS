@@ -76,7 +76,6 @@ function addCourse() {
 	});
 }
 function addFile(courseId) {
-	debugger;
 	var defaultBtnValue = $('.submit-btn').html();
 	$('.submit-btn').html("Please wait...");
 	$('.submit-btn').attr("disabled", true);

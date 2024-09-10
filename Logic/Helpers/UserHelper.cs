@@ -82,21 +82,8 @@ namespace Logic.Helpers
 			{
 				return Utility.Constants.DefaultLayout;
 			}
-			if (loggedInUser.Roles.Contains(Utility.Constants.SuperAdminRole))
-			{
-				return Utility.Constants.SuperAdminLayout;
-			}
-
-			if (loggedInUser.Roles.Contains(Utility.Constants.AdminRole))
-			{
-				return Utility.Constants.AdminLayout;
-			}
-
-			if (loggedInUser.Roles.Contains(Utility.Constants.LecturerRole))
-			{
-				return Utility.Constants.LecturerLayout;
-			}
-			return Utility.Constants.StudentLayout;
+			var isSuperAdmin = loggedInUser.Roles.Contains(Utility.Constants.SuperAdminRole);
+			return isSuperAdmin ? Utility.Constants.SuperAdminLayout : Utility.Constants.GeneralLayout;
 		}
 
 	}

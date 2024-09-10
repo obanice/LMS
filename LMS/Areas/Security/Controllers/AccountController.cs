@@ -177,5 +177,12 @@ namespace LMS.Areas.Security.Controllers
 			}
 			return Json(new { isError = true, mgs = "An error has occurred, try again. Please contact support if the error persists." });
 		}
+		[HttpPost]
+		public async Task<IActionResult> LogOut()
+		{
+			await _signInManager.SignOutAsync();
+			HttpContext.Session.Clear();
+			return RedirectToAction("Login", "Account", new { area = "Security" });
+		}
 	}
 }

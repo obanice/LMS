@@ -1,6 +1,7 @@
 ﻿using Core.ViewModels;
 using LMS.Controllers;
 using LMS.Models;
+using Logic.Helpers;
 using Logic.IHelpers;
 using Logic.Services;
 using Microsoft.AspNetCore.Mvc;
@@ -28,6 +29,11 @@ namespace LMS.Areas.Lecturer.Controllers
 			_emailHelper = emailHelper;
 			_mediaService = mediaService;
 			_lecturerHelper = lecturerHelper;
+		}
+		public IActionResult Index()
+		{
+			ViewBag.Layout = UserHelper.GetRoleLayout();
+			return View();
 		}
 		[HttpPost]
 		public async Task<JsonResult> AddStudyMaterial(int courseId, IFormFile file)

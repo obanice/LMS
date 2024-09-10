@@ -34,6 +34,7 @@ namespace LMS.Controllers
 		}
 		public IActionResult Index()
 		{
+			ViewBag.Layout = UserHelper.GetRoleLayout();
 			return View();
 		}
 		[HttpGet]
