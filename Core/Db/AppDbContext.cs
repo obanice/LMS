@@ -22,5 +22,6 @@ namespace Core.Db
         public DbSet<CommonDropDown> CommonDropDowns { get; set; }
         public DbSet<UserVerification> UserVerifications { get; set; }
         public DbSet<Media> Medias { get; set; }
+        public DbSet<Quiz> Quiz { get; set; }
     }
 }

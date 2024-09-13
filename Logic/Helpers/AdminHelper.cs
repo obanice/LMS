@@ -87,7 +87,7 @@ namespace Logic.Helpers
 			}
 			return new ApplicationUser();
 		}
-		public IPagedList<CourseViewModel> Courses(IPageListModel<CourseViewModel> model, int? departmentId, string lecturerId, int page, bool isLecturerCourse = false)
+		public IPagedList<CourseViewModel> Courses(IPageListModel<CourseViewModel> model, int? departmentId, string lecturerId, int page)
 		{
 			IQueryable<Course> query = GetByPredicate<Course>(p => p.Active);
 
@@ -96,12 +96,8 @@ namespace Logic.Helpers
 				query = query.Where(p => p.DepartmentId == departmentId);
 			}
 
-			if (isLecturerCourse)
+			if (!string.IsNullOrEmpty(lecturerId))
 			{
-				if (string.IsNullOrEmpty(lecturerId))
-				{
-					return new List<CourseViewModel>().ToPagedList(page, 25);
-				}
 				query = query.Where(p => p.LecturerId == lecturerId);
 			}
 
@@ -193,6 +189,54 @@ namespace Logic.Helpers
 				MediaTypeId = mediaId,
 			};
 			return Create<StudyMaterial, StudyMaterial>(materia);
+		}
+		public IPagedList<QuizViewModel> FetchQuizByCourseId(IPageListModel<QuizViewModel> model, int page)
+		{
+			var query = GetByPredicate<Quiz>(p => p.Active)
+				.Include(x=>x.Question)
+				.Include(x=>x.Answer)
+				.Include(x=>x.Course)
+				.AsQueryable();
+			if (!query.Any())
+			{
+				return new List<QuizViewModel>().ToPagedList(page, 25);
+			}
+			if (!string.IsNullOrEmpty(model.Keyword))
+			{
+				var keyword = model.Keyword.ToLower();
+				query = query.Where(v =>
+						v.Course.Code.ToLower().Contains(keyword) ||
+						v.Question.Name.ToLower().Contains(keyword) ||
+						v.Answer.Name.ToLower().Contains(keyword)
+				);
+			}
+
+			if (model.StartDate.HasValue)
+			{
+				query = query.Where(v => v.DateCreated >= model.StartDate);
+			}
+
+			if (model.EndDate.HasValue)
+			{
+				query = query.Where(v => v.DateCreated <= model.EndDate);
+			}
+
+			
+
+			var quiz = query.OrderByDescending(v => v.DateCreated)
+							   .Select(v => new QuizViewModel
+							   {
+								   Id = v.Id,
+								   CourseCode = v.Course.Code,
+								   QuestionFile = v.Question.PhysicalPath,
+								   AnswerFile = v.Answer.PhysicalPath,
+								   DateCreated = v.DateCreated.ToFormattedDate()
+							   })
+							   .ToPagedList(page, 25);
+
+			model.Model = quiz;
+
+			return quiz;
 		}
 	}
 }

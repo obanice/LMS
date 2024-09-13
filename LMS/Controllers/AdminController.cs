@@ -133,7 +133,7 @@ namespace LMS.Controllers
 			ViewBag.Layout = UserHelper.GetRoleLayout();
 			ViewBag.Lecturer = _dropDownHelper.GetLecturers();
 			ViewBag.Gender = _dropDownHelper.GetDropDownByKey(DropDownEnums.Gender);
-			var courses = _adminHelper.Courses(model, 0, lecturerId, page,false);
+			var courses = _adminHelper.Courses(model, 0, lecturerId, page);
 			model.Model = courses;
 			ViewBag.LecturerName = courses?.FirstOrDefault()?.LecturerName;
 			model.SearchAction = "LecturerCourse";

@@ -14,7 +14,8 @@ namespace Logic.IHelpers
 		bool AddCourse(CourseViewModel courseViewModel);
 		Task<ApplicationUser> AddLecturer(LecturerViewModel lecturerViewModel);
 		bool AddMaterial(int? courseId, int? mediaId);
-		IPagedList<CourseViewModel> Courses(IPageListModel<CourseViewModel> model, int? departmentId, string lecturerId, int page, bool isLecturerCourse = false);
+		IPagedList<CourseViewModel> Courses(IPageListModel<CourseViewModel> model, int? departmentId, string lecturerId, int page);
+		IPagedList<QuizViewModel> FetchQuizByCourseId(IPageListModel<QuizViewModel> model, int page);
 		List<StudyMaterialViewModel> GetStudyMaterialsByCoursesById(int? courseId);
 		IPagedList<LecturerViewModel> Lectures(IPageListModel<LecturerViewModel> model, int? departmentId, int page);
 	}

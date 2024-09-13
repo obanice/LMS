@@ -6,6 +6,7 @@ using Logic.IHelpers;
 using Logic.Services;
 using Microsoft.AspNetCore.Mvc;
 using System.Net.Http.Headers;
+using static Core.Enums.LMSEnum;
 
 namespace LMS.Areas.Lecturer.Controllers
 {
@@ -76,6 +77,29 @@ namespace LMS.Areas.Lecturer.Controllers
 		public IActionResult Material()
 		{
 			return View();
+		}
+		[HttpGet]
+		public IActionResult Courses(IPageListModel<CourseViewModel>? model, int page = 1)
+		{
+			ViewBag.Layout = UserHelper.GetRoleLayout();
+			ViewBag.Lecturer = _dropDownHelper.GetLecturers();
+			ViewBag.Level = _dropDownHelper.GetDropDownByKey(DropDownEnums.Level);
+			ViewBag.Semester = _dropDownHelper.GetDropDownByKey(DropDownEnums.Semester);
+			var courses = _adminHelper.Courses(model, CurrentUserDepartmentId, CurrentUserId, page);
+			model.Model = courses;
+			model.SearchAction = "Courses";
+			model.SearchController = "Home";
+			return View(model);
+		}
+		[HttpGet]
+		public IActionResult Quiz(IPageListModel<QuizViewModel>? model, int page = 1)
+		{
+			ViewBag.Layout = UserHelper.GetRoleLayout();
+			var quizzes = _adminHelper.FetchQuizByCourseId(model, page);
+			model.Model = quizzes;
+			model.SearchAction = "Quiz";
+			model.SearchController = "Home";
+			return View(model);
 		}
 	}
 }
