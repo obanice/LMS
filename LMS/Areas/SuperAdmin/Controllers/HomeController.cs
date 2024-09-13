@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using LMS.Models;
 using Newtonsoft.Json;
+using Logic.Helpers;
 
 namespace LMS.Areas.SuperAdmin.Controllers
 {
@@ -53,22 +54,77 @@ namespace LMS.Areas.SuperAdmin.Controllers
 				return ResponseHelper.JsonError("Error occurred");
 			}
 			var departmentViewModel = JsonConvert.DeserializeObject<AddDepartmentDTO>(departmentDetails);
-			if (departmentViewModel == null) {
+			if (departmentViewModel == null)
+			{
 				return ResponseHelper.JsonError("Error occurred");
 			}
-			var departmentAdmin =await _superAdminHelper.AddDepartment(departmentViewModel).ConfigureAwait(false);
+
+			// Check if department with the same name already exists
+			var isExistingDepartment = _superAdminHelper.CheckExistingDepartmentName(departmentViewModel.Name);
+			if (isExistingDepartment)
+			{
+				return ResponseHelper.JsonError("A department with the same name already exists");
+			}
+
+			var departmentAdmin = await _superAdminHelper.AddDepartment(departmentViewModel).ConfigureAwait(false);
 			if (departmentAdmin == null)
 			{
 				return ResponseHelper.JsonError("Unable to create department");
 			}
+
 			var userToken = await _emailHelper.CreateUserToken(departmentAdmin.Email).ConfigureAwait(false);
-			if (userToken != null)
+			if (userToken == null)
 			{
 				return ResponseHelper.JsonError("Admin added successfully, but error occurred while sending mail");
 			}
+
 			string linkToClick = HttpContext.Request.Scheme.ToString() + "://" + HttpContext.Request.Host.ToString() + "/Security/Account/ResetPassword?token=" + userToken.Token;
 			var sendEmail = _emailHelper.PasswordResetLink(departmentAdmin, linkToClick);
+
 			return ResponseHelper.JsonSuccess("Department added successfully");
+		}
+
+
+		public async Task<IActionResult> Admins()
+		{
+			var listOfAdmins = await _superAdminHelper.SystemAdmins().ConfigureAwait(false);
+			return View(listOfAdmins);
+		}
+
+		public JsonResult DeleteDepartment(int? departmentId)
+		{
+			if (departmentId != null)
+			{
+				var deleteDpt = _context.Departments.Where(d => d.Id == departmentId && d.Active).FirstOrDefault();
+				if (deleteDpt != null)
+				{
+					deleteDpt.Active = false;
+					_context.Departments.Update(deleteDpt);
+					_context.SaveChanges();
+					return ResponseHelper.JsonSuccess("Deleted Successfully");
+				}
+			}
+			return Json(new { isError = true, msg = "Not found" });
+
+		}
+		[HttpPost]
+		public JsonResult DeleteAdmin(string? userId)
+		{
+			if (string.IsNullOrEmpty(userId))
+			{
+				return ResponseHelper.JsonError("Error occurred");
+			}
+			var user = _context.ApplicationUsers
+				.FirstOrDefault(a => a.UserId == userId && a.IsDeactivated == false);
+			if (user == null)
+			{
+				return ResponseHelper.JsonError("Error occurred");
+			}
+			user.IsDeactivated = true;
+			_context.Update(user);
+			_context.SaveChanges();
+			return ResponseHelper.JsonError("Deleted Successfully");
+
 		}
 	}
 }
