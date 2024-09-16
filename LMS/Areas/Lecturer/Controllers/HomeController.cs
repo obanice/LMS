@@ -95,7 +95,8 @@ namespace LMS.Areas.Lecturer.Controllers
 		public IActionResult Quiz(IPageListModel<QuizViewModel>? model, int page = 1)
 		{
 			ViewBag.Layout = UserHelper.GetRoleLayout();
-			var quizzes = _adminHelper.FetchQuizByCourseId(model, page);
+			ViewBag.Courses = _dropDownHelper.GetCoursesDropDown(CurrentUserId);
+			var quizzes = _adminHelper.FetchQuizByLecturerId(model, page,CurrentUserId);
 			model.Model = quizzes;
 			model.SearchAction = "Quiz";
 			model.SearchController = "Home";

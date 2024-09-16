@@ -190,11 +190,10 @@ namespace Logic.Helpers
 			};
 			return Create<StudyMaterial, StudyMaterial>(materia);
 		}
-		public IPagedList<QuizViewModel> FetchQuizByCourseId(IPageListModel<QuizViewModel> model, int page)
+		public IPagedList<QuizViewModel> FetchQuizByLecturerId(IPageListModel<QuizViewModel> model, int page, string loggedInUserId)
 		{
-			var query = GetByPredicate<Quiz>(p => p.Active)
+			var query = GetByPredicate<Quiz>(p => p.Active && p.LecturerId == loggedInUserId)
 				.Include(x=>x.Question)
-				.Include(x=>x.Answer)
 				.Include(x=>x.Course)
 				.AsQueryable();
 			if (!query.Any())
@@ -206,8 +205,7 @@ namespace Logic.Helpers
 				var keyword = model.Keyword.ToLower();
 				query = query.Where(v =>
 						v.Course.Code.ToLower().Contains(keyword) ||
-						v.Question.Name.ToLower().Contains(keyword) ||
-						v.Answer.Name.ToLower().Contains(keyword)
+						v.Question.Name.ToLower().Contains(keyword)
 				);
 			}
 
@@ -229,7 +227,6 @@ namespace Logic.Helpers
 								   Id = v.Id,
 								   CourseCode = v.Course.Code,
 								   QuestionFile = v.Question.PhysicalPath,
-								   AnswerFile = v.Answer.PhysicalPath,
 								   DateCreated = v.DateCreated.ToFormattedDate()
 							   })
 							   .ToPagedList(page, 25);

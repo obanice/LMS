@@ -32,9 +32,9 @@
 						<li class="breadcrumb-item active">Quiz</li>
 					</ul>
 				</div>
-				@* <div class="col-auto float-right ml-auto">
+				<div class="col-auto float-right ml-auto">
 					<a href="#" class="btn add-btn" data-toggle="modal" data-target="#add_Quiz"><i class="fa fa-plus"></i> Add Quiz</a>
-				</div> *@
+				</div>
 			</div>
 		</div>
 		<!-- /Page Header -->
@@ -81,39 +81,26 @@
 	<!-- /Page Content -->
 	@Html.Partial("_Pager", Model.Model)
 </div>
-
 <div id="add_Quiz" class="modal custom-modal fade" role="dialog">
-	<div class="modal-dialog modal-dialog-centered modal-lg">
+	<div class="modal-dialog modal-dialog-centered modal-md" role="document">
 		<div class="modal-content">
 			<div class="modal-header">
-				<h5 class="modal-title">Add Course</h5>
+				<h5 class="modal-title">Add File</h5>
 				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
 					<span aria-hidden="true">&times;</span>
 				</button>
 			</div>
 			<div class="modal-body">
-				<div class="row">
-					<div class="col-sm-6">
-						<div class="form-group">
-							<label class="col-form-label">Code<span class="text-danger">*</span></label>
-							<input class="form-control" id="code" type="text">
-						</div>
-					</div>
-					<div class="col-sm-6">
-						<div class="form-group">
-							<label class="col-form-label">Name</label>
-							<input class="form-control" id="name" type="text">
-						</div>
-					</div>
-					<div class="col-sm-6">
-						<div class="form-group">
-							<label class="col-form-label">Description</label>
-							<input class="form-control" id="description" type="text">
-						</div>
-					</div>
+				<div class="form-group">
+					<label>Course <span class="text-danger">*</span></label>
+					<select id="courseId" style="width:100%" asp-items="@(new SelectList(ViewBag.Courses ,"Id", "Name" ))" class="form-control makeFilter"> </select>
+				</div>
+				<div class="form-group">
+					<label>Upload File</label>
+					<input class="form-control" type="file" id="fileUrl">
 				</div>
 				<div class="submit-section">
-					<button class="btn btn-primary submit-btn" onclick="addCourse()">Add</button>
+					<button class="btn btn-primary submit-btn" onclick="addQuiz()">Add File</button>
 				</div>
 			</div>
 		</div>

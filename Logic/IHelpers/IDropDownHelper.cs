@@ -10,6 +10,7 @@ namespace Logic.IHelpers
 		Task<bool> CreateDropDownsAsync(CommonDropDown commonDropDowns);
 		bool DeleteDropDownById(int id);
 		bool EditDropDown(CommonDropDown commonDropdowns);
+		List<CourseViewModel> GetCoursesDropDown(string lectureId);
 		List<DepartmentViewModel> GetDepartments();
 		List<CommonDropDown> GetDropDownByKey(DropDownEnums dropDownKey);
 		List<DropdownEnumModel> GetDropDownEnumList();

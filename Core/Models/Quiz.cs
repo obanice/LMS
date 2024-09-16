@@ -17,11 +17,12 @@ namespace Core.Models
         public int? QuestionId { get; set; }
 		[ForeignKey(nameof(QuestionId))]
 		public virtual Media? Question { get; set; }
-		public int? AnswerId { get; set; }
-		[ForeignKey(nameof(AnswerId))]
-		public virtual Media? Answer { get; set; }
 		public int? CourseId { get; set; }
 		[ForeignKey(nameof(CourseId))]
 		public virtual Course? Course { get; set; }
+		public string? LecturerId { get; set; }
+		[ForeignKey(nameof(LecturerId))]
+		public virtual ApplicationUser? Lecturer { get; set; }
+		public ICollection<QuizAnswers> Answers { get; set; }
 	}
 }

@@ -166,6 +166,25 @@ namespace Logic.Helpers
 
 			return users;
 		}
+		public List<CourseViewModel> GetCoursesDropDown(string lectureId)
+		{
+			if (string.IsNullOrEmpty(lectureId))
+			{
+				return [];
+			}
+
+			var courses = _context.Courses
+				.Where(d => d.LecturerId == lectureId && d.Active)
+				.Select(x => new CourseViewModel
+				{
+					Id = x.Id,
+					Name = x.Name
+				})
+				.ToList();
+			courses.Insert(0, new CourseViewModel { Id = 0, Name = "-- Select --" });
+
+			return courses;
+		}
 
 	}
 	public class drp
