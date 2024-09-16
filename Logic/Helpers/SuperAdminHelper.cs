@@ -52,6 +52,19 @@ namespace Logic.Helpers
 			return db.ApplicationUsers
 					.FirstOrDefault(x => x.DepartmentId == departmentId && !x.IsDeactivated && x.IsDepartmentAdmin); ;
 		}
+
+		public bool CheckExistingDepartmentName(string name)
+		{
+			if (name != null)
+			{
+				var checkName = db.Departments.Where(x => x.Name.ToLower() == name && x.Active).FirstOrDefault();
+				if (checkName != null)
+				{
+					return true;
+				}
+			}
+			return false;
+		}
 		public async Task<ApplicationUser> AddDepartment(AddDepartmentDTO departmentDTO)
 		{
 			var department = new Department
@@ -84,6 +97,21 @@ namespace Logic.Helpers
 				return applicationUser;
 			}
 			return new ApplicationUser();
+		}
+
+		public async Task<List<ApplicationUserViewModel>?> SystemAdmins()
+		{
+			var users = new List<ApplicationUserViewModel>();
+			var systemAdmin = await _userManager
+				.GetUsersInRoleAsync(Utility.Constants.AdminRole)
+				.ConfigureAwait(false);
+			return systemAdmin?.Select(x => new ApplicationUserViewModel
+			{
+				Id = x.Id,
+				Email = x.Email,
+				PhoneNumber = x.PhoneNumber,
+				FullName = x.FullName,
+			}).ToList();
 		}
 	}
 }

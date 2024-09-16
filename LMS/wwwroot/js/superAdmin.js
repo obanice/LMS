@@ -35,3 +35,65 @@
 		}
 	});
 }
+
+function departmentIdToDelete(id) {
+	$("#deleteId").val(id);
+}
+function deleteDepartmentById() {
+	var id = $("#deleteId").val();
+	$.ajax({
+		type: 'Post',
+		dataType: 'json',
+		url: '/SuperAdmin/Home/DeleteDepartment',
+		data:
+		{
+			departmentId: id,
+		},
+		success: function (result) {
+			if (!result.isError) {
+				var url = '/SuperAdmin/Home';
+				successAlertWithRedirect(result.msg, url)
+			}
+			else {
+				errorAlert(result.msg)
+			}
+		},
+
+	});
+
+}
+
+
+
+
+function adminIdToDelete(id) {
+	debugger
+	$('#delete_adminId').val(id);
+}
+function deleteAdminById() {
+	debugger;
+	var userId = $("#delete_adminId").val();
+	$.ajax({
+		type: 'Post',
+		dataType: 'json',
+		url: '/SuperAdmin/Home/DeleteAdmin',
+		data:
+		{
+			userId: userId,
+		},
+		success: function (result) {
+			debugger;
+			if (!result.isError) {
+				var url = '/SuperAdmin/Home';
+				successAlertWithRedirect(result.msg, url)
+			}
+			else {
+				errorAlert(result.msg)
+			}
+		},
+
+	});
+
+}
+
+
