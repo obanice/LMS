@@ -98,6 +98,8 @@ public class Utility
 		public static string SuperAdminLayout = "~/Views/Shared/_SuperAdminLayout.cshtml";
 		public static string GeneralLayout = "~/Views/Shared/_GeneralLayout.cshtml";
 		public static string StudyMaterials = "StudyMaterials";
+		public static string Quiz = "Quiz";
+		public static string QuizAnswers = "QuizAnswers";
 	}
 	public bool CheckAdminIsLogin()
 	{

@@ -46,11 +46,10 @@
 							<th>S/N</th>
 							<th>Code</th>
 							<th>Name</th>
-							<th>Description</th>
-							<th>Lecturer</th>
 							<th>Level</th>
 							<th>Semester</th>
 							<th>Study Materials</th>
+							<th>Quizzes</th>
 							<th class="text-right no-sort">Action</th>
 						</tr>
 					</thead>
@@ -63,12 +62,13 @@
 									<td></td>
 									<td>@course.Code</td>
 									<td>@course.Name</td>
-									<td>@course.Description</td>
-									<td>@course.LecturerName</td>
 									<td>@course.Level</td>
 									<td>@course.Semester</td>
 									<td>
 										<a asp-route-courseId="@course.Id" asp-area="" asp-controller="Admin" asp-action="Materials" class="btn add-btn text-white"><i class="fa fa-book"></i>Materials</a>
+									</td>
+									<td>
+										<a asp-route-courseId="@course.Id" asp-area="Lecturer" asp-controller="Home" asp-action="Quiz" class="btn add-btn text-white"><i class="fa fa-book"></i>Quizzes</a>
 									</td>
 									<td class="text-right">
 										<div class="dropdown dropdown-action">

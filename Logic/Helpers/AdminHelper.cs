@@ -125,7 +125,8 @@ namespace Logic.Helpers
 			query = query.Include(x => x.Lecturer)
 						 .Include(x => x.Department)
 						 .Include(x => x.Semester)
-						 .Include(x => x.Level);
+						 .Include(x => x.Level)
+						 .Include(x=>x.Quizzes);
 
 			if (!query.Any())
 			{
@@ -168,7 +169,7 @@ namespace Logic.Helpers
 		}
 		public List<StudyMaterialViewModel> GetStudyMaterialsByCoursesById(int?  courseId)
 		{
-			return GetByPredicate<StudyMaterial>(x => x.CourseId == courseId)
+			return [.. GetByPredicate<StudyMaterial>(x => x.CourseId == courseId)
 				.Include(x => x.MediaType)
 				.Include(x => x.Course)
 				.Select(v => new StudyMaterialViewModel
@@ -179,7 +180,7 @@ namespace Logic.Helpers
 					File = v.MediaType.PhysicalPath,
 					Date = v.DateCreated.ToFormattedDate(),
 					FileExtension = v.MediaType.MediaType.GetEnumDescription()
-				}).ToList();
+				})];
 		}
 		public bool AddMaterial(int? courseId, int? mediaId)
 		{
@@ -190,50 +191,6 @@ namespace Logic.Helpers
 			};
 			return Create<StudyMaterial, StudyMaterial>(materia);
 		}
-		public IPagedList<QuizViewModel> FetchQuizByLecturerId(IPageListModel<QuizViewModel> model, int page, string loggedInUserId)
-		{
-			var query = GetByPredicate<Quiz>(p => p.Active && p.LecturerId == loggedInUserId)
-				.Include(x=>x.Question)
-				.Include(x=>x.Course)
-				.AsQueryable();
-			if (!query.Any())
-			{
-				return new List<QuizViewModel>().ToPagedList(page, 25);
-			}
-			if (!string.IsNullOrEmpty(model.Keyword))
-			{
-				var keyword = model.Keyword.ToLower();
-				query = query.Where(v =>
-						v.Course.Code.ToLower().Contains(keyword) ||
-						v.Question.Name.ToLower().Contains(keyword)
-				);
-			}
-
-			if (model.StartDate.HasValue)
-			{
-				query = query.Where(v => v.DateCreated >= model.StartDate);
-			}
-
-			if (model.EndDate.HasValue)
-			{
-				query = query.Where(v => v.DateCreated <= model.EndDate);
-			}
-
-			
-
-			var quiz = query.OrderByDescending(v => v.DateCreated)
-							   .Select(v => new QuizViewModel
-							   {
-								   Id = v.Id,
-								   CourseCode = v.Course.Code,
-								   QuestionFile = v.Question.PhysicalPath,
-								   DateCreated = v.DateCreated.ToFormattedDate()
-							   })
-							   .ToPagedList(page, 25);
-
-			model.Model = quiz;
-
-			return quiz;
-		}
+		
 	}
 }

@@ -10,7 +10,12 @@ namespace Core.Models
 {
 	public class Quiz
 	{
-		[Key]
+        public Quiz()
+        {
+			Active = true;
+			DateCreated = DateTime.Now;
+        }
+        [Key]
 		public int Id { get; set; }
         public bool Active { get; set; }
         public DateTime? DateCreated { get; set; }

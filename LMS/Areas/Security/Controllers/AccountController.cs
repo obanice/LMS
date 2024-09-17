@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 using Serilog;
+using static Core.Enums.LMSEnum;
 
 namespace LMS.Areas.Security.Controllers
 {
@@ -20,22 +21,28 @@ namespace LMS.Areas.Security.Controllers
         private readonly IUserHelper _userHelper;
         private readonly IEmailHelper emailHelper;
         private readonly AppDbContext db;
+        private readonly IDropDownHelper _dropDownHelper;
 		public AccountController(
 			UserManager<ApplicationUser> userManager,
 			IUserHelper userHelper,
 			SignInManager<ApplicationUser> signInManager,
 			AppDbContext dbContext,
-			IEmailHelper emailHelper)
+			IEmailHelper emailHelper,
+            IDropDownHelper dropDownHelper)
 		{
 			_userManager = userManager;
 			_userHelper = userHelper;
 			_signInManager = signInManager;
 			db = dbContext;
 			this.emailHelper = emailHelper;
+            _dropDownHelper = dropDownHelper;
 		}
 		[HttpGet]
         public IActionResult Register()
         {
+            ViewBag.Gender = _dropDownHelper.GetDropDownByKey(DropDownEnums.Gender);
+            ViewBag.Department = _dropDownHelper.GetDepartments();
+            ViewBag.Level = _dropDownHelper.GetDropDownByKey(DropDownEnums.Level);
             return View();
         }
 
@@ -103,30 +110,30 @@ namespace LMS.Areas.Security.Controllers
         {
             try
             {
-                if (userDetails == null)
+                if (string.IsNullOrEmpty(userDetails))
                 {
                     return ResponseHelper.JsonError("An error has occurred, try again. Please contact support if the error persists");
                 }
                 var applicationUserViewModel = JsonConvert.DeserializeObject<ApplicationUserViewModel>(userDetails);
-                if (applicationUserViewModel != null)
+                if (applicationUserViewModel == null)
                 {
                     return ResponseHelper.JsonError("Error occurred");
                 }
                 var checkForEmail = await _userHelper.FindByEmailAsync(applicationUserViewModel.Email).ConfigureAwait(false);
                 if (checkForEmail != null)
                 {
-                    return Json(new { isError = true, msg = "Email belongs to another user" });
+					return ResponseHelper.JsonError("Email belongs to another user");
                 }
                 if (applicationUserViewModel.Password != applicationUserViewModel.ConfirmPassword)
                 {
-                    return Json(new { isError = true, msg = "Password and Confirm password must match" });
+					return ResponseHelper.JsonError("Password and Confirm password must match");
                 }
                 var isUserCreated = await _userHelper.CreateUser(applicationUserViewModel).ConfigureAwait(false);
                 if (isUserCreated)
                 {
-                    return Json(new { isError = false, msg = "Registered successfully, login to continue" });
+					return ResponseHelper.JsonSuccess("Registered successfully, login to continue");
                 }
-                return Json(new { isError = true, msg = "Unable to register" });
+                return ResponseHelper.JsonError("Unable to register");
             }
             catch (Exception ex)
             {

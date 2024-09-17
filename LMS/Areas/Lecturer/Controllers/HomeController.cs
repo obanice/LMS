@@ -92,13 +92,40 @@ namespace LMS.Areas.Lecturer.Controllers
 			return View(model);
 		}
 		[HttpGet]
-		public IActionResult Quiz(IPageListModel<QuizViewModel>? model, int page = 1)
+		public IActionResult Quiz(int? courseId, IPageListModel<QuizViewModel>? model, int page = 1)
 		{
 			ViewBag.Layout = UserHelper.GetRoleLayout();
 			ViewBag.Courses = _dropDownHelper.GetCoursesDropDown(CurrentUserId);
-			var quizzes = _adminHelper.FetchQuizByLecturerId(model, page,CurrentUserId);
+			var quizzes = _lecturerHelper.FetchQuizByLecturerId(courseId,model, page,CurrentUserId);
 			model.Model = quizzes;
 			model.SearchAction = "Quiz";
+			model.SearchController = "Home";
+			return View(model);
+		}
+		[HttpPost]
+		[DisableRequestSizeLimit]
+		public async Task<JsonResult> AddQuiz(int? courseId, IFormFile file)
+		{
+			if (courseId == 0 || file == null)
+			{
+				return ResponseHelper.JsonError("Error occurred");
+			}
+			var quizDTO = new QuizDTO();
+			var fileName = ContentDispositionHeaderValue.Parse(file.ContentDisposition).FileName?.Trim('"');
+			var media = await _mediaService.SaveMediaAsync(file.OpenReadStream(), fileName, Utility.Constants.Quiz, _mediaService.GetMediaType(fileName)).ConfigureAwait(false);
+			quizDTO.QuestionId = media.Id;
+			quizDTO.CourseId = courseId;
+			quizDTO.LecturerId = CurrentUserId;
+			var isQuizSet = _lecturerHelper.AddQuiz(quizDTO);
+			return isQuizSet ? ResponseHelper.JsonSuccess($"Quiz set successfully") : ResponseHelper.JsonError($"Unable to set quiz");
+		}
+		[HttpGet]
+		public IActionResult QuizAnswers(int? quizId, IPageListModel<QuizAnswersViewModel>? model, int page = 1)
+		{
+			ViewBag.Layout = UserHelper.GetRoleLayout();
+			var quizAnswers = _lecturerHelper.FetchQuizAnswersByQuizId(quizId, model, page);
+			model.Model = quizAnswers;
+			model.SearchAction = "QuizAnswers";
 			model.SearchController = "Home";
 			return View(model);
 		}

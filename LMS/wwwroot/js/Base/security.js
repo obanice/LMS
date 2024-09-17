@@ -7,10 +7,13 @@ function registerUser() {
 	$('#submit_btn').attr("disabled", true);
 	var data = {};
 	data.Email = $('#email').val();
-	data.PassWord = $('#password').val();
-	data.ConfirmPassword = $('#confirmPassword').val();
 	data.FirstName = $('#firstName').val();
 	data.LastName = $('#lastName').val();
+	data.GenderId = $('#genderId').val();
+	data.DepartmentId = $('#departmentId').val();
+	data.LevelId = $('#levelId').val();
+	data.Password = $('#password').val();
+	data.ConfirmPassword = $('#confirmPassword').val();
 	$.ajax({
 		type: 'Post',
 		url: '/Security/Account/Register',

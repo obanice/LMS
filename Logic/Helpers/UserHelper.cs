@@ -52,25 +52,22 @@ namespace Logic.Helpers
             return "/Security/Account/Login";
         }
 
-        public async Task<bool> CreateUser(ApplicationUserViewModel userDetails)
+        public async Task<bool> CreateUser(ApplicationUserViewModel userViewModel)
         {
             var user = new ApplicationUser();
-            user.UserName = userDetails.Email;
-            user.Email = userDetails.Email;
-            user.FirstName = userDetails.FirstName;
-            user.LastName = userDetails.LastName;
-            user.PhoneNumber = userDetails.PhoneNumber;
+            user.UserName = userViewModel.Email;
+            user.Email = userViewModel.Email;
+            user.FirstName = userViewModel.FirstName;
+            user.LastName = userViewModel.LastName;
+            user.PhoneNumber = userViewModel.PhoneNumber;
             user.DateCreated = DateTime.Now;
             user.IsDeactivated = false;
-            if (userDetails.Role == Utility.Constants.StudentRole)
-            {
-                user.LevelId = userDetails.LevelId;
-            }
-            user.DepartmentId = userDetails.DepartmentId;
-            var createUser = await _userManager.CreateAsync(user, userDetails.Password).ConfigureAwait(false);
+			user.LevelId = userViewModel.LevelId;
+			user.DepartmentId = userViewModel.DepartmentId;
+            var createUser = await _userManager.CreateAsync(user, userViewModel.Password).ConfigureAwait(false);
             if (createUser.Succeeded)
             {
-                await _userManager.AddToRoleAsync(user, userDetails.Role).ConfigureAwait(false);
+                await _userManager.AddToRoleAsync(user, Utility.Constants.StudentRole).ConfigureAwait(false);
                 return true;
             }
             return false;
