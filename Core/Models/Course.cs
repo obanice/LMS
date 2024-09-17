@@ -19,7 +19,6 @@ namespace Core.Models
         [ForeignKey(nameof(LevelId))]
         public virtual CommonDropDown? Level { get; set; }
         public ICollection<Quiz> Quizzes { get; set; }
-        public ICollection<Enrollment> Enrollments { get; set; }
         public ICollection<StudyMaterial> StudyMaterials { get; set; }
     }
 }

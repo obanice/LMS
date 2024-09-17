@@ -10,7 +10,12 @@ namespace Core.Models
 {
 	public class QuizAnswers
 	{
-		[Key]
+        public QuizAnswers()
+        {
+			Active = true;
+			DateSubmitted = DateTime.Now;
+        }
+        [Key]
 		public int Id { get; set; }
 		public bool Active { get; set; }
 		public decimal? Mark { get; set; }

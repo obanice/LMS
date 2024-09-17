@@ -1,0 +1,101 @@
+﻿@using Core
+@using Core.ViewModels;
+@model Core.ViewModels.IPageListModel<QuizViewModel>
+@{
+	ViewData["Title"] = "Quiz";
+	Layout = ViewBag.Layout;
+	ViewData["CustomActionName"] = Model.SearchAction;
+}
+<style>
+
+	body {
+		counter-reset: Serial;
+	}
+
+	tr td:first-child:before {
+		counter-increment: Serial;
+		content: counter(Serial);
+	}
+</style>
+
+<div class="page-wrapper">
+
+	<div class="content container-fluid">
+
+		<!-- Page Header -->
+		<div class="page-header">
+			<div class="row align-items-center">
+				<div class="col">
+					<h3 class="page-title">Quiz</h3>
+					<ul class="breadcrumb">
+						<li class="breadcrumb-item"><a href="#">Dashboard</a></li>
+					</ul>
+				</div>
+			</div>
+		</div>
+		<!-- /Page Header -->
+		<!-- Search Filter -->
+		@Html.Partial("_PageSearcher", Model)
+		<!-- Search Filter -->
+		<section class="card-box">
+			<div class="table-responsive">
+				<table class="table table-striped">
+					<thead>
+						<tr>
+							<th>S/N</th>
+							<th>Course Code</th>
+							<th>Question File</th>
+							<th>Date Set</th>
+							<th class="text-right">Action</th>
+						</tr>
+					</thead>
+					<tbody>
+						@if (Model.Model != null)
+						{
+							@foreach (var quiz in Model.Model)
+							{
+								<tr>
+									<td></td>
+									<td>@quiz.CourseCode</td>
+									<td>
+										<a class="btn btn-white btn-sm btn-rounded" target="_blank" href="@quiz.QuestionFile"><i class="fa fa-dot-circle-o text-success"></i> View </a>
+									</td>
+									<td>@quiz.DateCreated</td>
+									<td class="text-right">
+										<a onclick="getQuiz('@quiz.Id')" class="btn add-btn text-white"><i class="fa fa-plus"></i>Upload Answer</a>
+									</td>
+								</tr>
+							}
+						}
+					</tbody>
+				</table>
+			</div>
+		</section>
+	</div>
+	<!-- /Page Content -->
+	@Html.Partial("_Pager", Model.Model)
+	<div id="add_Answer" class="modal custom-modal fade" role="dialog">
+		<div class="modal-dialog modal-dialog-centered modal-md" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title">Upload</h5>
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+				</div>
+				<div class="modal-body">
+					<input hidden id="quizId"/>
+					<div class="form-group">
+						<label>Upload File</label>
+						<input class="form-control" type="file" id="fileUrl">
+					</div>
+					<div class="submit-section">
+						<button class="btn btn-primary submit-btn" onclick="addAnswers()">Upload</button>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+

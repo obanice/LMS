@@ -105,7 +105,6 @@ static void UpdateDatabase(IApplicationBuilder app)
 		ServiceExtensions.SeedRolesAsync(context).Wait();
 		ServiceExtensions.SeedSuperAdminAsync(context).Wait();
 		ServiceExtensions.SeedSuperAdminRolesAsync(context).Wait();
-		ServiceExtensions.SeedScreensAsync(context).Wait();
 		ServiceExtensions.SeedCommonDropDownsAsync(context).Wait();
 	}
 }

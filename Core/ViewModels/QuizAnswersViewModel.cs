@@ -15,4 +15,10 @@ namespace Core.ViewModels
         public string? AnswerFile { get; set; }
         public string? DateSubmitted { get; set; }
     }
+	public class QuizAnswersDTO
+	{
+		public int? AnswerId { get; set; }
+		public int? QuizId { get; set; }
+		public string? StudentId { get; set; }
+	}
 }

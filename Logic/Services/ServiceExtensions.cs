@@ -33,6 +33,7 @@ public static class ServiceExtensions
 		services.AddScoped<ILecturerHelper, LecturerHelper>();
 		services.AddScoped<IMediaService, MediaService>();
 		services.AddScoped<IFileManager, FileManager>();
+		services.AddScoped<IStudentHelper, StudentHelper>();
 
 		return services;
 	}
@@ -138,35 +139,6 @@ public static class ServiceExtensions
 
         return app;
     }
-
-	public static async Task SeedScreensAsync(AppDbContext context)
-	{
-		var existingUrls = await context.Screens.Select(s => s.Url).ToListAsync();
-
-		existingUrls = existingUrls ?? new List<string>();
-
-		var screens = new[]
-		{
-			//VHC Areas
-			new { Url = "ScreenUrls.VHCDashboard", Class = "la la-dashboard", Name = "VHC Dashboard" },
-			
-		};
-
-		var newScreens = screens.Where(s => !existingUrls.Contains(s.Url)).Select(s => new Screen
-		{
-			Url = s.Url,
-			Class = s.Class,
-			Name = s.Name,
-			DateCreated = DateTime.UtcNow,
-			Active = true
-		}).ToList();
-
-		if (newScreens.Any())
-		{
-			context.Screens.AddRange(newScreens);
-			await context.SaveChangesAsync();
-		}
-	}
 	public static async Task SeedRolesAsync(AppDbContext context)
 	{
 		var existingRoles = await context.Roles.Select(s => s.Id).ToListAsync();

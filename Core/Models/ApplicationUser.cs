@@ -39,7 +39,6 @@ namespace Core.Models
         [ForeignKey(nameof(DepartmentId))]
         public virtual Department? Department { get; set; }
         public ICollection<Course> Courses { get; set; }
-        public ICollection<Enrollment> Enrollments { get; set; }
         public ICollection<StudyMaterial> StudyMaterials { get; set; }
         [NotMapped]
         public string FullName => FirstName + " " + LastName;

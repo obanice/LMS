@@ -245,7 +245,18 @@
 						}
 						@if (user.UserRole == Utility.Constants.StudentRole)
 						{
-							
+							<li class="submenu">
+								<a asp-area="Student" asp-action="Index" asp-controller="Home"><i class="la la-dashboard"></i> <span> Dashboard</span></a>
+							</li>
+							<li>
+								<a asp-area="Student" asp-controller="Home" asp-action="Courses"><i class="fa fa-book"></i> <span>Courses</span></a>
+							</li>
+							<li>
+								<a asp-area="Student" asp-controller="Home" asp-action="Materials"><i class="la la-ticket"></i> <span>Materials</span></a>
+							</li>
+							<li class="submenu">
+								<a asp-area="Student" asp-action="Quiz" asp-controller="Home"><i class="fa fa-pencil"></i> <span> Quiz</span></a>
+							</li>
 						}
 					</ul>
 				</div>

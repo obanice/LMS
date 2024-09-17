@@ -1,0 +1,66 @@
+﻿@model IEnumerable<Core.ViewModels.StudyMaterialViewModel>
+@{
+	ViewData["Title"] = "Materials";
+	Layout = ViewBag.Layout;
+}
+<!-- Page Wrapper -->
+<div class="page-wrapper">
+
+	<!-- Page Content -->
+	<div class="content container-fluid">
+
+		<div class="file-wrap" style="display:block;">
+			<div class="file-cont-wrap" style="margin-left:0px!important;">
+				<div class="file-cont-inner">
+					<div class="file-cont-header">
+						<span>File Manager</span>
+					</div>
+					<div class="file-content">
+						<div class="file-body">
+							<div class="file-scroll">
+								<div class="file-content-inner">
+									<div class="row">
+										@if (Model != null && Model.Count() > 0)
+										{
+											@foreach (var studyMaterial in Model)
+											{
+												<div class="col-6 col-sm-4 col-md-3 col-lg-4 col-xl-3">
+													<div class="card card-file">
+														<div class="dropdown-file">
+															<a href="" class="dropdown-link" data-toggle="dropdown"><i class="fa fa-ellipsis-v"></i></a>
+															<div class="dropdown-menu dropdown-menu-right">
+																<a href="@studyMaterial.File" class="dropdown-item">Download</a>
+															</div>
+														</div>
+														<div class="card-file-thumb">
+															@if (@studyMaterial.FileExtension.ToLower().Contains("doc"))
+															{
+																<i class="fa fa-file-word-o"></i>
+															}
+															else
+															{
+																<i class="fa fa-file-@studyMaterial.FileExtension?.ToLower()-o"></i>	
+															}
+														</div>
+														<div class="card-body">
+															<h6><a href="">@studyMaterial.Name</a></h6>
+															<span>@studyMaterial.Code</span>
+														</div>
+														<div class="card-footer">@studyMaterial.Date</div>
+													</div>
+												</div>
+											}
+
+										}
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!-- /Page Content -->
+</div>
+<!-- /Page Wrapper -->

@@ -8,10 +8,14 @@ using Microsoft.AspNetCore.Mvc;
 using LMS.Models;
 using Newtonsoft.Json;
 using Logic.Helpers;
+using Microsoft.AspNetCore.Authorization;
+using static Logic.AppHttpContext;
 
 namespace LMS.Areas.SuperAdmin.Controllers
 {
 	[Area("SuperAdmin")]
+	[Authorize]
+	[SessionTimeout]
 	public class HomeController : Controller
 	{
 		private readonly AppDbContext _context;

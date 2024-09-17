@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace Core.Migrations
 {
     /// <inheritdoc />
-    public partial class modelSetUp : Migration
+    public partial class tableSetUp : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -26,6 +26,22 @@ namespace Core.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "CommonDropDowns",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    DropDownKey = table.Column<int>(type: "int", nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Active = table.Column<bool>(type: "bit", nullable: false),
+                    DateCreated = table.Column<DateTime>(type: "datetime2", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_CommonDropDowns", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Departments",
                 columns: table => new
                 {
@@ -41,20 +57,20 @@ namespace Core.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Screens",
+                name: "Medias",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Url = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Class = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    PhysicalPath = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    MediaType = table.Column<int>(type: "int", nullable: false),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    DateCreated = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    Active = table.Column<bool>(type: "bit", nullable: false)
+                    Active = table.Column<bool>(type: "bit", nullable: false),
+                    DateCreated = table.Column<DateTime>(type: "datetime2", nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Screens", x => x.Id);
+                    table.PrimaryKey("PK_Medias", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -89,7 +105,10 @@ namespace Core.Migrations
                     MiddleName = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     IsDeactivated = table.Column<bool>(type: "bit", nullable: true),
                     DateCreated = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    Level = table.Column<int>(type: "int", nullable: true),
+                    IsDepartmentAdmin = table.Column<bool>(type: "bit", nullable: true),
+                    GenderId = table.Column<int>(type: "int", nullable: true),
+                    LevelId = table.Column<int>(type: "int", nullable: true),
+                    SemesterId = table.Column<int>(type: "int", nullable: true),
                     UserId = table.Column<string>(type: "nvarchar(450)", nullable: true),
                     DepartmentId = table.Column<int>(type: "int", nullable: true),
                     UserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
@@ -114,6 +133,21 @@ namespace Core.Migrations
                         name: "FK_AspNetUsers_AspNetUsers_UserId",
                         column: x => x.UserId,
                         principalTable: "AspNetUsers",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_AspNetUsers_CommonDropDowns_GenderId",
+                        column: x => x.GenderId,
+                        principalTable: "CommonDropDowns",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_AspNetUsers_CommonDropDowns_LevelId",
+                        column: x => x.LevelId,
+                        principalTable: "CommonDropDowns",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_AspNetUsers_CommonDropDowns_SemesterId",
+                        column: x => x.SemesterId,
+                        principalTable: "CommonDropDowns",
                         principalColumn: "Id");
                     table.ForeignKey(
                         name: "FK_AspNetUsers_Departments_DepartmentId",
@@ -213,14 +247,15 @@ namespace Core.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Code = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Active = table.Column<bool>(type: "bit", nullable: false),
-                    DateCreated = table.Column<DateTime>(type: "datetime2", nullable: false),
                     DepartmentId = table.Column<int>(type: "int", nullable: true),
                     LecturerId = table.Column<string>(type: "nvarchar(450)", nullable: true),
-                    Semester = table.Column<int>(type: "int", nullable: true)
+                    SemesterId = table.Column<int>(type: "int", nullable: true),
+                    LevelId = table.Column<int>(type: "int", nullable: true),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Active = table.Column<bool>(type: "bit", nullable: false),
+                    DateCreated = table.Column<DateTime>(type: "datetime2", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -231,6 +266,16 @@ namespace Core.Migrations
                         principalTable: "AspNetUsers",
                         principalColumn: "Id");
                     table.ForeignKey(
+                        name: "FK_Courses_CommonDropDowns_LevelId",
+                        column: x => x.LevelId,
+                        principalTable: "CommonDropDowns",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_Courses_CommonDropDowns_SemesterId",
+                        column: x => x.SemesterId,
+                        principalTable: "CommonDropDowns",
+                        principalColumn: "Id");
+                    table.ForeignKey(
                         name: "FK_Courses_Departments_DepartmentId",
                         column: x => x.DepartmentId,
                         principalTable: "Departments",
@@ -238,100 +283,53 @@ namespace Core.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "ScreenRoles",
+                name: "UserVerifications",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    RoleId = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    ScreenChecked = table.Column<bool>(type: "bit", nullable: false),
-                    Priority = table.Column<int>(type: "int", nullable: true),
+                    Token = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     UserId = table.Column<string>(type: "nvarchar(450)", nullable: true),
-                    ScreenId = table.Column<int>(type: "int", nullable: true)
+                    Used = table.Column<bool>(type: "bit", nullable: false),
+                    DateUsed = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_ScreenRoles", x => x.Id);
+                    table.PrimaryKey("PK_UserVerifications", x => x.Token);
                     table.ForeignKey(
-                        name: "FK_ScreenRoles_AspNetUsers_UserId",
+                        name: "FK_UserVerifications_AspNetUsers_UserId",
                         column: x => x.UserId,
                         principalTable: "AspNetUsers",
-                        principalColumn: "Id");
-                    table.ForeignKey(
-                        name: "FK_ScreenRoles_Screens_ScreenId",
-                        column: x => x.ScreenId,
-                        principalTable: "Screens",
                         principalColumn: "Id");
                 });
 
             migrationBuilder.CreateTable(
-                name: "Enrollments",
+                name: "Quiz",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    UserId = table.Column<string>(type: "nvarchar(450)", nullable: true),
-                    CourseId = table.Column<int>(type: "int", nullable: false),
-                    EnrollmentDate = table.Column<DateTime>(type: "datetime2", nullable: false)
+                    Active = table.Column<bool>(type: "bit", nullable: false),
+                    DateCreated = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    QuestionId = table.Column<int>(type: "int", nullable: true),
+                    CourseId = table.Column<int>(type: "int", nullable: true),
+                    LecturerId = table.Column<string>(type: "nvarchar(450)", nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Enrollments", x => x.Id);
+                    table.PrimaryKey("PK_Quiz", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Enrollments_AspNetUsers_UserId",
-                        column: x => x.UserId,
+                        name: "FK_Quiz_AspNetUsers_LecturerId",
+                        column: x => x.LecturerId,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id");
                     table.ForeignKey(
-                        name: "FK_Enrollments_Courses_CourseId",
-                        column: x => x.CourseId,
-                        principalTable: "Courses",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "LecturerDepartments",
-                columns: table => new
-                {
-                    Id = table.Column<long>(type: "bigint", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    UserId = table.Column<string>(type: "nvarchar(450)", nullable: true),
-                    CourseId = table.Column<int>(type: "int", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_LecturerDepartments", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_LecturerDepartments_AspNetUsers_UserId",
-                        column: x => x.UserId,
-                        principalTable: "AspNetUsers",
-                        principalColumn: "Id");
-                    table.ForeignKey(
-                        name: "FK_LecturerDepartments_Courses_CourseId",
+                        name: "FK_Quiz_Courses_CourseId",
                         column: x => x.CourseId,
                         principalTable: "Courses",
                         principalColumn: "Id");
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Modules",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Content = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    DateCreated = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    CourseId = table.Column<int>(type: "int", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Modules", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Modules_Courses_CourseId",
-                        column: x => x.CourseId,
-                        principalTable: "Courses",
+                        name: "FK_Quiz_Medias_QuestionId",
+                        column: x => x.QuestionId,
+                        principalTable: "Medias",
                         principalColumn: "Id");
                 });
 
@@ -341,20 +339,19 @@ namespace Core.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    FileUrl = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Level = table.Column<int>(type: "int", nullable: true),
-                    DateUploaded = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    LecturerId = table.Column<string>(type: "nvarchar(450)", nullable: true),
+                    MediaTypeId = table.Column<int>(type: "int", nullable: true),
                     CourseId = table.Column<int>(type: "int", nullable: true),
-                    DepartmentId = table.Column<int>(type: "int", nullable: true)
+                    ApplicationUserId = table.Column<string>(type: "nvarchar(450)", nullable: true),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Active = table.Column<bool>(type: "bit", nullable: false),
+                    DateCreated = table.Column<DateTime>(type: "datetime2", nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_StudyMaterials", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_StudyMaterials_AspNetUsers_LecturerId",
-                        column: x => x.LecturerId,
+                        name: "FK_StudyMaterials_AspNetUsers_ApplicationUserId",
+                        column: x => x.ApplicationUserId,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id");
                     table.ForeignKey(
@@ -363,31 +360,42 @@ namespace Core.Migrations
                         principalTable: "Courses",
                         principalColumn: "Id");
                     table.ForeignKey(
-                        name: "FK_StudyMaterials_Departments_DepartmentId",
-                        column: x => x.DepartmentId,
-                        principalTable: "Departments",
+                        name: "FK_StudyMaterials_Medias_MediaTypeId",
+                        column: x => x.MediaTypeId,
+                        principalTable: "Medias",
                         principalColumn: "Id");
                 });
 
             migrationBuilder.CreateTable(
-                name: "Lessons",
+                name: "QuizAnswers",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    VideoUrl = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Content = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    ModuleId = table.Column<int>(type: "int", nullable: true),
-                    DateCreated = table.Column<DateTime>(type: "datetime2", nullable: false)
+                    Active = table.Column<bool>(type: "bit", nullable: false),
+                    Mark = table.Column<decimal>(type: "decimal(18,2)", nullable: true),
+                    DateSubmitted = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    AnswerId = table.Column<int>(type: "int", nullable: true),
+                    QuizId = table.Column<int>(type: "int", nullable: true),
+                    StudentId = table.Column<string>(type: "nvarchar(450)", nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Lessons", x => x.Id);
+                    table.PrimaryKey("PK_QuizAnswers", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Lessons_Modules_ModuleId",
-                        column: x => x.ModuleId,
-                        principalTable: "Modules",
+                        name: "FK_QuizAnswers_AspNetUsers_StudentId",
+                        column: x => x.StudentId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_QuizAnswers_Medias_AnswerId",
+                        column: x => x.AnswerId,
+                        principalTable: "Medias",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_QuizAnswers_Quiz_QuizId",
+                        column: x => x.QuizId,
+                        principalTable: "Quiz",
                         principalColumn: "Id");
                 });
 
@@ -429,6 +437,21 @@ namespace Core.Migrations
                 column: "DepartmentId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_AspNetUsers_GenderId",
+                table: "AspNetUsers",
+                column: "GenderId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_AspNetUsers_LevelId",
+                table: "AspNetUsers",
+                column: "LevelId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_AspNetUsers_SemesterId",
+                table: "AspNetUsers",
+                column: "SemesterId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_AspNetUsers_UserId",
                 table: "AspNetUsers",
                 column: "UserId");
@@ -451,44 +474,49 @@ namespace Core.Migrations
                 column: "LecturerId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Enrollments_CourseId",
-                table: "Enrollments",
+                name: "IX_Courses_LevelId",
+                table: "Courses",
+                column: "LevelId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Courses_SemesterId",
+                table: "Courses",
+                column: "SemesterId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Quiz_CourseId",
+                table: "Quiz",
                 column: "CourseId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Enrollments_UserId",
-                table: "Enrollments",
-                column: "UserId");
+                name: "IX_Quiz_LecturerId",
+                table: "Quiz",
+                column: "LecturerId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_LecturerDepartments_CourseId",
-                table: "LecturerDepartments",
-                column: "CourseId");
+                name: "IX_Quiz_QuestionId",
+                table: "Quiz",
+                column: "QuestionId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_LecturerDepartments_UserId",
-                table: "LecturerDepartments",
-                column: "UserId");
+                name: "IX_QuizAnswers_AnswerId",
+                table: "QuizAnswers",
+                column: "AnswerId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Lessons_ModuleId",
-                table: "Lessons",
-                column: "ModuleId");
+                name: "IX_QuizAnswers_QuizId",
+                table: "QuizAnswers",
+                column: "QuizId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Modules_CourseId",
-                table: "Modules",
-                column: "CourseId");
+                name: "IX_QuizAnswers_StudentId",
+                table: "QuizAnswers",
+                column: "StudentId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_ScreenRoles_ScreenId",
-                table: "ScreenRoles",
-                column: "ScreenId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_ScreenRoles_UserId",
-                table: "ScreenRoles",
-                column: "UserId");
+                name: "IX_StudyMaterials_ApplicationUserId",
+                table: "StudyMaterials",
+                column: "ApplicationUserId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_StudyMaterials_CourseId",
@@ -496,14 +524,14 @@ namespace Core.Migrations
                 column: "CourseId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_StudyMaterials_DepartmentId",
+                name: "IX_StudyMaterials_MediaTypeId",
                 table: "StudyMaterials",
-                column: "DepartmentId");
+                column: "MediaTypeId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_StudyMaterials_LecturerId",
-                table: "StudyMaterials",
-                column: "LecturerId");
+                name: "IX_UserVerifications_UserId",
+                table: "UserVerifications",
+                column: "UserId");
         }
 
         /// <inheritdoc />
@@ -525,34 +553,31 @@ namespace Core.Migrations
                 name: "AspNetUserTokens");
 
             migrationBuilder.DropTable(
-                name: "Enrollments");
-
-            migrationBuilder.DropTable(
-                name: "LecturerDepartments");
-
-            migrationBuilder.DropTable(
-                name: "Lessons");
-
-            migrationBuilder.DropTable(
-                name: "ScreenRoles");
+                name: "QuizAnswers");
 
             migrationBuilder.DropTable(
                 name: "StudyMaterials");
 
             migrationBuilder.DropTable(
+                name: "UserVerifications");
+
+            migrationBuilder.DropTable(
                 name: "AspNetRoles");
 
             migrationBuilder.DropTable(
-                name: "Modules");
-
-            migrationBuilder.DropTable(
-                name: "Screens");
+                name: "Quiz");
 
             migrationBuilder.DropTable(
                 name: "Courses");
 
             migrationBuilder.DropTable(
+                name: "Medias");
+
+            migrationBuilder.DropTable(
                 name: "AspNetUsers");
+
+            migrationBuilder.DropTable(
+                name: "CommonDropDowns");
 
             migrationBuilder.DropTable(
                 name: "Departments");

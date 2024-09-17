@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Core.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20240909095442_addedMediaTypeToDb")]
-    partial class addedMediaTypeToDb
+    [Migration("20240917163209_tableSetUp")]
+    partial class tableSetUp
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -120,85 +120,6 @@ namespace Core.Migrations
                     b.ToTable("Departments");
                 });
 
-            modelBuilder.Entity("Core.Models.Enrollment", b =>
-                {
-                    b.Property<int?>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int?>("Id"));
-
-                    b.Property<int>("CourseId")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime>("EnrollmentDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("UserId")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("CourseId");
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("Enrollments");
-                });
-
-            modelBuilder.Entity("Core.Models.LecturerCourses", b =>
-                {
-                    b.Property<long>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
-
-                    b.Property<int?>("CourseId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("UserId")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("CourseId");
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("LecturerDepartments");
-                });
-
-            modelBuilder.Entity("Core.Models.Lesson", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("Content")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("DateCreated")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int?>("ModuleId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Name")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("VideoUrl")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ModuleId");
-
-                    b.ToTable("Lessons");
-                });
-
             modelBuilder.Entity("Core.Models.Media", b =>
                 {
                     b.Property<int>("Id")
@@ -227,34 +148,7 @@ namespace Core.Migrations
                     b.ToTable("Medias");
                 });
 
-            modelBuilder.Entity("Core.Models.Module", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("Content")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int?>("CourseId")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime>("DateCreated")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("Name")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("CourseId");
-
-                    b.ToTable("Modules");
-                });
-
-            modelBuilder.Entity("Core.Models.Screen", b =>
+            modelBuilder.Entity("Core.Models.Quiz", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -265,24 +159,30 @@ namespace Core.Migrations
                     b.Property<bool>("Active")
                         .HasColumnType("bit");
 
-                    b.Property<string>("Class")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int?>("CourseId")
+                        .HasColumnType("int");
 
                     b.Property<DateTime?>("DateCreated")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("Name")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<string>("LecturerId")
+                        .HasColumnType("nvarchar(450)");
 
-                    b.Property<string>("Url")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int?>("QuestionId")
+                        .HasColumnType("int");
 
                     b.HasKey("Id");
 
-                    b.ToTable("Screens");
+                    b.HasIndex("CourseId");
+
+                    b.HasIndex("LecturerId");
+
+                    b.HasIndex("QuestionId");
+
+                    b.ToTable("Quiz");
                 });
 
-            modelBuilder.Entity("Core.Models.ScreenRole", b =>
+            modelBuilder.Entity("Core.Models.QuizAnswers", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -290,28 +190,33 @@ namespace Core.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int?>("Priority")
-                        .HasColumnType("int");
-
-                    b.Property<string>("RoleId")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("ScreenChecked")
+                    b.Property<bool>("Active")
                         .HasColumnType("bit");
 
-                    b.Property<int?>("ScreenId")
+                    b.Property<int?>("AnswerId")
                         .HasColumnType("int");
 
-                    b.Property<string>("UserId")
+                    b.Property<DateTime?>("DateSubmitted")
+                        .HasColumnType("datetime2");
+
+                    b.Property<decimal?>("Mark")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<int?>("QuizId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("StudentId")
                         .HasColumnType("nvarchar(450)");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("ScreenId");
+                    b.HasIndex("AnswerId");
 
-                    b.HasIndex("UserId");
+                    b.HasIndex("QuizId");
 
-                    b.ToTable("ScreenRoles");
+                    b.HasIndex("StudentId");
+
+                    b.ToTable("QuizAnswers");
                 });
 
             modelBuilder.Entity("Core.Models.StudyMaterial", b =>
@@ -657,69 +562,46 @@ namespace Core.Migrations
                     b.Navigation("Semester");
                 });
 
-            modelBuilder.Entity("Core.Models.Enrollment", b =>
+            modelBuilder.Entity("Core.Models.Quiz", b =>
                 {
                     b.HasOne("Core.Models.Course", "Course")
-                        .WithMany("Enrollments")
-                        .HasForeignKey("CourseId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Core.Models.ApplicationUser", "User")
-                        .WithMany("Enrollments")
-                        .HasForeignKey("UserId");
-
-                    b.Navigation("Course");
-
-                    b.Navigation("User");
-                });
-
-            modelBuilder.Entity("Core.Models.LecturerCourses", b =>
-                {
-                    b.HasOne("Core.Models.Course", "Course")
-                        .WithMany()
+                        .WithMany("Quizzes")
                         .HasForeignKey("CourseId");
 
-                    b.HasOne("Core.Models.ApplicationUser", "User")
+                    b.HasOne("Core.Models.ApplicationUser", "Lecturer")
                         .WithMany()
-                        .HasForeignKey("UserId");
+                        .HasForeignKey("LecturerId");
+
+                    b.HasOne("Core.Models.Media", "Question")
+                        .WithMany()
+                        .HasForeignKey("QuestionId");
 
                     b.Navigation("Course");
 
-                    b.Navigation("User");
+                    b.Navigation("Lecturer");
+
+                    b.Navigation("Question");
                 });
 
-            modelBuilder.Entity("Core.Models.Lesson", b =>
+            modelBuilder.Entity("Core.Models.QuizAnswers", b =>
                 {
-                    b.HasOne("Core.Models.Module", "Module")
-                        .WithMany("Lessons")
-                        .HasForeignKey("ModuleId");
-
-                    b.Navigation("Module");
-                });
-
-            modelBuilder.Entity("Core.Models.Module", b =>
-                {
-                    b.HasOne("Core.Models.Course", "Course")
-                        .WithMany("Modules")
-                        .HasForeignKey("CourseId");
-
-                    b.Navigation("Course");
-                });
-
-            modelBuilder.Entity("Core.Models.ScreenRole", b =>
-                {
-                    b.HasOne("Core.Models.Screen", "Screen")
+                    b.HasOne("Core.Models.Media", "Answer")
                         .WithMany()
-                        .HasForeignKey("ScreenId");
+                        .HasForeignKey("AnswerId");
 
-                    b.HasOne("Core.Models.ApplicationUser", "User")
+                    b.HasOne("Core.Models.Quiz", "Quiz")
+                        .WithMany("Answers")
+                        .HasForeignKey("QuizId");
+
+                    b.HasOne("Core.Models.ApplicationUser", "Student")
                         .WithMany()
-                        .HasForeignKey("UserId");
+                        .HasForeignKey("StudentId");
 
-                    b.Navigation("Screen");
+                    b.Navigation("Answer");
 
-                    b.Navigation("User");
+                    b.Navigation("Quiz");
+
+                    b.Navigation("Student");
                 });
 
             modelBuilder.Entity("Core.Models.StudyMaterial", b =>
@@ -836,23 +718,19 @@ namespace Core.Migrations
 
             modelBuilder.Entity("Core.Models.Course", b =>
                 {
-                    b.Navigation("Enrollments");
-
-                    b.Navigation("Modules");
+                    b.Navigation("Quizzes");
 
                     b.Navigation("StudyMaterials");
                 });
 
-            modelBuilder.Entity("Core.Models.Module", b =>
+            modelBuilder.Entity("Core.Models.Quiz", b =>
                 {
-                    b.Navigation("Lessons");
+                    b.Navigation("Answers");
                 });
 
             modelBuilder.Entity("Core.Models.ApplicationUser", b =>
                 {
                     b.Navigation("Courses");
-
-                    b.Navigation("Enrollments");
 
                     b.Navigation("StudyMaterials");
                 });

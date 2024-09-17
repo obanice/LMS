@@ -145,3 +145,42 @@ function addQuiz() {
 		}
 	});
 }
+function addAnswers() {
+	var defaultBtnValue = $('.submit-btn').html();
+	$('.submit-btn').html("Please wait...");
+	$('.submit-btn').attr("disabled", true);
+	var formData = new FormData();
+	var quizId = $('#quizId').val();
+	var file = document.getElementById("fileUrl").files[0];
+	formData.append("quizId", quizId);
+	formData.append("file", file);
+
+	$.ajax({
+		type: 'post',
+		url: '/Student/Home/UploadAnswer',
+		data: formData,
+		contentType: false,
+		processData: false,
+		success: function (result) {
+			$('.submit-btn').html(defaultBtnValue);
+			$('.submit-btn').attr("disabled", false);
+			if (!result.isError) {
+				var url = window.location.href;
+				successAlertWithRedirect(result.msg, url);
+			} else {
+				$('.submit-btn').html(defaultBtnValue);
+				$('.submit-btn').attr("disabled", false);
+				errorAlert(result.msg);
+			}
+		},
+		error: function (ex) {
+			$('.submit-btn').html(defaultBtnValue);
+			$('.submit-btn').attr("disabled", false);
+			errorAlert(ex);
+		}
+	});
+}
+function getQuiz(quizId) {
+	$('#quizId').val(quizId);
+	$('#add_Answer').modal('show');
+}

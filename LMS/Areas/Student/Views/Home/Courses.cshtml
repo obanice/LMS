@@ -1,0 +1,82 @@
+﻿@using Core
+@using Core.ViewModels;
+@model Core.ViewModels.IPageListModel<CourseViewModel>
+@{
+    ViewData["Title"] = "Courses";
+    Layout = ViewBag.Layout;
+    ViewData["CustomActionName"] = Model.SearchAction;
+}
+<style>
+
+	body {
+		counter-reset: Serial;
+	}
+
+	tr td:first-child:before {
+		counter-increment: Serial;
+		content: counter(Serial);
+	}
+</style>
+
+<div class="page-wrapper">
+
+	<div class="content container-fluid">
+
+		<!-- Page Header -->
+		<div class="page-header">
+			<div class="row align-items-center">
+				<div class="col">
+					<h3 class="page-title">Courses</h3>
+					<ul class="breadcrumb">
+						<li class="breadcrumb-item"><a href="#">Dashboard</a></li>
+					</ul>
+				</div>
+			</div>
+		</div>
+		<!-- /Page Header -->
+		<!-- Search Filter -->
+		@Html.Partial("_PageSearcher", Model)
+		<!-- Search Filter -->
+		<section class="card-box">
+			<div class="table-responsive">
+				<table class="table table-striped">
+					<thead>
+						<tr>
+							<th>S/N</th>
+							<th>Code</th>
+							<th>Name</th>
+							<th>Lecturer</th>
+							<th>Semester</th>
+							<th>Study Materials</th>
+							<th class="text-center">Quizzes</th>
+						</tr>
+					</thead>
+					<tbody>
+						@if (Model.Model != null)
+						{
+							@foreach (var course in Model.Model)
+							{
+								<tr>
+									<td></td>
+									<td>@course.Code</td>
+									<td>@course.Name</td>
+									<td>@course.LecturerName</td>
+									<td>@course.Semester</td>
+									<td>
+										<a asp-route-courseId="@course.Id" asp-area="Student" asp-controller="Home" asp-action="Materials" class="btn add-btn text-white"><i class="fa fa-book"></i>Materials</a>
+									</td>
+									<td>
+										<a asp-route-courseId="@course.Id" asp-area="Student" target="_blank" asp-controller="Home" asp-action="Quiz" class="btn add-btn text-white text-center"><i class="fa fa-book"></i>Quizzes</a>
+									</td>
+								</tr>
+							}
+						}
+					</tbody>
+				</table>
+			</div>
+		</section>
+	</div>
+	<!-- /Page Content -->
+	@Html.Partial("_Pager", Model.Model)
+</div>
+

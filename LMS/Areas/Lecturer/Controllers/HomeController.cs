@@ -4,13 +4,17 @@ using LMS.Models;
 using Logic.Helpers;
 using Logic.IHelpers;
 using Logic.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Net.Http.Headers;
 using static Core.Enums.LMSEnum;
+using static Logic.AppHttpContext;
 
 namespace LMS.Areas.Lecturer.Controllers
 {
 	[Area("Lecturer")]
+	[Authorize]
+	[SessionTimeout]
 	public class HomeController : BaseController
 	{
 		private readonly IAdminHelper _adminHelper;
