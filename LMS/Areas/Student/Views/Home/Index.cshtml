@@ -13,7 +13,7 @@
 		<div class="page-header">
 			<div class="row">
 				<div class="col-sm-12">
-					<h3 class="page-title">Welcome Student!</h3>
+					<h3 class="page-title">Welcome @Utility.GetCurrentUser().FullName!</h3>
 					<ul class="breadcrumb">
 						<li class="breadcrumb-item active">Dashboard</li>
 					</ul>
@@ -23,7 +23,7 @@
 		<!-- /Page Header -->
 
 		<div class="row">
-			<div class="col-md-12 d-flex">
+			<div class="col-md-6 d-flex">
 				<div class="card card-table flex-fill">
 					<div class="card-header">
 						<h3 class="card-title mb-0">Recent Quiz</h3>
@@ -56,6 +56,42 @@
 					</div>
 					<div class="card-footer">
 						<a href="#">View all quiz</a>
+					</div>
+				</div>
+			</div>
+			<div class="col-md-6 d-flex">
+				<div class="card card-table flex-fill">
+					<div class="card-header">
+						<h3 class="card-title mb-0">Recent Study Material</h3>
+					</div>
+					<div class="card-body">
+						<div class="table-responsive">
+							<table class="table custom-table mb-0">
+								<thead>
+									<tr>
+										<th>Course Code</th>
+										<th>Date Created</th>
+										<th>Lecturer</th>
+										<th>File</th>
+									</tr>
+								</thead>
+								<tbody>
+									<tr>
+										<td>CSC 302</td>
+										<td>14/08/2024</td>
+										<td>Marv O Yohanan</td>
+										<td>
+											<div class="dropdown action-label">
+												<a class="btn btn-white btn-sm btn-rounded" href="#"><i class="fa fa-dot-circle-o text-success"></i> File</a>
+											</div>
+										</td>
+									</tr>
+								</tbody>
+							</table>
+						</div>
+					</div>
+					<div class="card-footer">
+						<a href="#">View all materials</a>
 					</div>
 				</div>
 			</div>

@@ -18,17 +18,15 @@ namespace Logic.Helpers
 	{
 		IPagedList<CourseViewModel> Courses(IPageListModel<CourseViewModel> model, int? departmentId, int? levelId, int page);
 		IPagedList<QuizViewModel> FetchAllQuiz(IPageListModel<QuizViewModel> model, int page, int? courseId);
+		IPagedList<QuizAnswersViewModel> FetchQuizAnswersByStudentId(string loggedInUserId, IPageListModel<QuizAnswersViewModel> model, int page);
 		List<StudyMaterialViewModel> GetStudyMaterials(int? departmentId);
 		bool UploadAnswer(QuizAnswersDTO quizAnswers);
 	}
 
-	public class StudentHelper : BaseHelper, IStudentHelper
+	public class StudentHelper(AppDbContext dbContext) : BaseHelper(dbContext), IStudentHelper
     {
-		private readonly AppDbContext db;
-		public StudentHelper(AppDbContext dbContext) : base(dbContext)
-		{
-			db = dbContext;
-		}
+		private readonly AppDbContext db = dbContext;
+
 		public List<StudyMaterialViewModel> GetStudyMaterials(int? departmentId)
 		{
 			return [.. db.StudyMaterials
@@ -163,6 +161,42 @@ namespace Logic.Helpers
 		public bool UploadAnswer(QuizAnswersDTO quizAnswers)
 		{
 			return Create<QuizAnswersDTO, QuizAnswers>(quizAnswers);
+		}
+		public IPagedList<QuizAnswersViewModel> FetchQuizAnswersByStudentId(string loggedInUserId, IPageListModel<QuizAnswersViewModel> model, int page)
+		{
+
+			var query = GetByPredicate<QuizAnswers>(p => p.Active && p.StudentId == loggedInUserId)
+				.Include(x => x.Quiz)
+				.ThenInclude(x => x.Course)
+				.Include(x => x.Answer)
+				.AsQueryable();
+
+			if (!query.Any())
+			{
+				return new List<QuizAnswersViewModel>().ToPagedList(page, 25);
+			}
+			if (!string.IsNullOrEmpty(model.Keyword))
+			{
+				var keyword = model.Keyword.ToLower();
+				query = query.Where(v =>
+						v.Mark.ToString().ToLower().Contains(keyword) ||
+						v.Quiz.Course.Code.ToLower().Contains(keyword)
+				);
+			}
+
+			var quiz = query.OrderByDescending(v => v.DateSubmitted)
+							   .Select(v => new QuizAnswersViewModel
+							   {
+								   Id = v.Id,
+								   CourseCode = v.Quiz.Course.Code,
+								   AnswerFile = v.Answer.PhysicalPath,
+								   Mark = v.Mark
+							   })
+							   .ToPagedList(page, 25);
+
+			model.Model = quiz;
+
+			return quiz;
 		}
 	}
 }

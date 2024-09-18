@@ -43,11 +43,9 @@
 					<thead>
 						<tr>
 							<th>S/N</th>
-							<th>Student</th>
-							<th>File</th>
+							<th>Course Code</th>
 							<th>Score</th>
-							<th>Date Submitted</th>
-							<th>Add Score</th>
+							<th>Answer</th>
 						</tr>
 					</thead>
 					<tbody>
@@ -57,14 +55,10 @@
 							{
 								<tr>
 									<td></td>
-									<td>@quiz.StudentFullName</td>
+									<td>@quiz.CourseCode</td>
+									<td>@quiz.Mark</td>
 									<td>
 										<a class="btn btn-white btn-sm btn-rounded" target="_blank" href="@quiz.AnswerFile"><i class="fa fa-dot-circle-o text-success"></i> View </a>
-									</td>
-									<td>@quiz.Mark</td>
-									<td>@quiz.DateSubmitted</td>
-									<td>
-										<a class="btn btn-white btn-sm btn-rounded" onclick="getQuiz('@quiz.Id')"><i class="fa fa-plus text-success"></i> Add Score </a>
 									</td>
 								</tr>
 							}
@@ -76,27 +70,5 @@
 	</div>
 	<!-- /Page Content -->
 	@Html.Partial("_Pager", Model.Model)
-</div>
-<div id="add_score" class="modal custom-modal fade" role="dialog">
-	<div class="modal-dialog modal-dialog-centered modal-md" role="document">
-		<div class="modal-content">
-			<div class="modal-header">
-				<h5 class="modal-title">Add Mark</h5>
-				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
-					<span aria-hidden="true">&times;</span>
-				</button>
-			</div>
-			<div class="modal-body">
-				<input hidden id="quizId"/>
-				<div class="form-group">
-					<label>Score</label>
-					<input class="form-control" type="text" id="mark">
-				</div>
-				<div class="submit-section">
-					<button class="btn btn-primary submit-btn" onclick="addmark()">Add</button>
-				</div>
-			</div>
-		</div>
-	</div>
 </div>
 

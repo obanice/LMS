@@ -22,16 +22,12 @@
 	<!-- Datatable CSS -->
 	<link href="~/light/assets/css/datatables.bootstrap4.min.css" rel="stylesheet" />
 	<link href="https://cdn.datatables.net/plug-ins/1.13.4/sorting/datetime-moment.js" />
-	<link href="~/js/multi_select/filter_multi_select.css" rel="stylesheet" />
 	<link href="~/multi_select/sumoselect.min.css" rel="stylesheet" />
 	<link href="~/light/assets/css/bootstrap-select.css" rel="stylesheet" />
 	<!-- Select2 CSS -->
 	<link href="~/light/assets/css/select2.min.css" rel="stylesheet" />
 	<link href="~/css/sweetalert2.css" rel="stylesheet" />
 	<link href="~/css/buttons.datatables.min.css" rel="stylesheet" />
-	<link href="~/summernote/summernote-bs4.css" rel="stylesheet" />
-	<link href="~/summernote/summernote-bs4.min.css" rel="stylesheet" />
-	<link href="~/driver/driver.min.css" rel="stylesheet" />
 	<!-- Datetimepicker CSS -->
 	<link href="~/light/assets/css/bootstrap-datetimepicker.min.css" rel="stylesheet" />
 	<!-- Main CSS -->
@@ -148,7 +144,6 @@
 			<div class="header-left">
 				<a href="#" class="logo">
 					<h3 class="mt-3">LMS</h3>
-					@* <img src="~/light/assets/img/logo.png" width="40" height="40" alt=""> *@
 				</a>
 			</div>
 			<!-- /Logo -->
@@ -213,7 +208,7 @@
 								<span>Main</span>
 							</li>
 							<li class="submenu">
-								<a asp-action="Index" asp-controller="Admin"><i class="la la-dashboard"></i> <span> Dashboard</span></a>
+								<a asp-controller="Admin" asp-action="Index"><i class="la la-dashboard"></i> <span> Dashboard</span></a>
 							</li>
 							<li class="menu-title">
 								<span>Lecturer</span>
@@ -234,19 +229,19 @@
 						@if (user.UserRole == Utility.Constants.LecturerRole)
 						{
 							<li class="submenu">
-								<a asp-area="Lecturer" asp-action="Index" asp-controller="Home"><i class="la la-dashboard"></i> <span> Dashboard</span></a>
+								<a asp-area="Lecturer" asp-controller="Home" asp-action="Index"><i class="la la-dashboard"></i> <span> Dashboard</span></a>
 							</li>
 							<li class="submenu">
-								<a asp-area="Lecturer" asp-action="Courses" asp-controller="Home"><i class="fa fa-book"></i> <span> Courses</span></a>
+								<a asp-area="Lecturer" asp-controller="Home" asp-action="Courses"><i class="fa fa-book"></i> <span> Courses</span></a>
 							</li>
 							<li class="submenu">
-								<a asp-area="Lecturer" asp-action="Quiz" asp-controller="Home"><i class="fa fa-pencil"></i> <span> Quiz</span></a>
+								<a asp-area="Lecturer" asp-controller="Home" asp-action="Quiz"><i class="fa fa-pencil"></i> <span> Quiz</span></a>
 							</li>
 						}
 						@if (user.UserRole == Utility.Constants.StudentRole)
 						{
 							<li class="submenu">
-								<a asp-area="Student" asp-action="Index" asp-controller="Home"><i class="la la-dashboard"></i> <span> Dashboard</span></a>
+								<a asp-area="Student" asp-controller="Home" asp-action="Index"><i class="la la-dashboard"></i> <span> Dashboard</span></a>
 							</li>
 							<li>
 								<a asp-area="Student" asp-controller="Home" asp-action="Courses"><i class="fa fa-book"></i> <span>Courses</span></a>
@@ -255,7 +250,10 @@
 								<a asp-area="Student" asp-controller="Home" asp-action="Materials"><i class="la la-ticket"></i> <span>Materials</span></a>
 							</li>
 							<li class="submenu">
-								<a asp-area="Student" asp-action="Quiz" asp-controller="Home"><i class="fa fa-pencil"></i> <span> Quiz</span></a>
+								<a asp-area="Student" asp-controller="Home" asp-action="Quiz"><i class="fa fa-pencil"></i> <span> Quiz</span></a>
+							</li>
+							<li class="submenu">
+								<a asp-area="Student" asp-controller="Home" asp-action="Scores"><i class="la la-external-link-square"></i> <span> Scores</span></a>
 							</li>
 						}
 					</ul>
@@ -274,17 +272,15 @@
 	<!-- /Main Wrapper -->
 	<script src="~/light/assets/js/popper.min.js"></script>
 	<script src="~/light/assets/js/bootstrap.min.js"></script>
-	<script src="~/light/assets/js/select2.min.js"></script>
 	<!-- Slimscroll JS -->
-	<script src="~/light/assets/js/jquery.slimscroll.min.js"></script>
+    <script src="~/light/assets/js/jquery.slimscroll.min.js"></script>
 
 	<script src="~/js/sweetalert2.all.min.js"></script>
-	<script src="~/js/jquery-ui.js"></script>
+    <script src="~/js/jquery-ui.js"></script>
+    <script src="~/js/select2.min.js"></script>
 	<!-- Datetimepicker JS -->
 	<script src="~/light/assets/js/moment.min.js"></script>
 	<script src="~/light/assets/js/bootstrap-datetimepicker.min.js"></script>
-	<script src="~/summernote/summernote-bs4.js"></script>
-	<script src="~/summernote/summernote-bs4.min.js"></script>
 	<!-- Datatable JS -->
 	<script src="~/light/assets/js/jquery.datatables.min.js"></script>
 	<script src="~/light/assets/js/datatables.bootstrap4.min.js"></script>

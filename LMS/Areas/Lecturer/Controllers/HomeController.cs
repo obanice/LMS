@@ -15,26 +15,20 @@ namespace LMS.Areas.Lecturer.Controllers
 	[Area("Lecturer")]
 	[Authorize]
 	[SessionTimeout]
-	public class HomeController : BaseController
+	[Authorize(Roles = "Lecturer")]
+	public class HomeController(
+		IAdminHelper adminHelper,
+		IDropDownHelper dropDownHelper,
+		IEmailHelper emailHelper,
+		IMediaService mediaService,
+		ILecturerHelper lecturerHelper) : BaseController
 	{
-		private readonly IAdminHelper _adminHelper;
-		private readonly ILecturerHelper _lecturerHelper;
-		private readonly IDropDownHelper _dropDownHelper;
-		private readonly IEmailHelper _emailHelper;
-		private readonly IMediaService _mediaService;
-		public HomeController(
-			IAdminHelper adminHelper,
-			IDropDownHelper dropDownHelper,
-			IEmailHelper emailHelper,
-			IMediaService mediaService,
-			ILecturerHelper lecturerHelper)
-		{
-			_adminHelper = adminHelper;
-			_dropDownHelper = dropDownHelper;
-			_emailHelper = emailHelper;
-			_mediaService = mediaService;
-			_lecturerHelper = lecturerHelper;
-		}
+		private readonly IAdminHelper _adminHelper = adminHelper;
+		private readonly ILecturerHelper _lecturerHelper = lecturerHelper;
+		private readonly IDropDownHelper _dropDownHelper = dropDownHelper;
+		private readonly IEmailHelper _emailHelper = emailHelper;
+		private readonly IMediaService _mediaService = mediaService;
+
 		public IActionResult Index()
 		{
 			ViewBag.Layout = UserHelper.GetRoleLayout();
@@ -76,11 +70,6 @@ namespace LMS.Areas.Lecturer.Controllers
 				LogCritical($"Failed to create study material, this error was thrown${exp.InnerException?.Message ?? exp.Message}");
 				throw;
 			}
-		}
-
-		public IActionResult Material()
-		{
-			return View();
 		}
 		[HttpGet]
 		public IActionResult Courses(IPageListModel<CourseViewModel>? model, int page = 1)
@@ -132,6 +121,12 @@ namespace LMS.Areas.Lecturer.Controllers
 			model.SearchAction = "QuizAnswers";
 			model.SearchController = "Home";
 			return View(model);
+		}
+		[HttpPost]
+		public JsonResult AddScore(int quizId, decimal? mark)
+		{
+			var quizAnswer = _lecturerHelper.AddScoreToQuiz(quizId, mark);
+			return quizAnswer == null ? ResponseHelper.JsonError("Error Occurred") : ResponseHelper.JsonSuccess("Score Added successfully");
 		}
 	}
 }

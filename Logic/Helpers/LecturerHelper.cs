@@ -10,15 +10,8 @@ using X.PagedList;
 
 namespace Logic.Helpers
 {
-	public class LecturerHelper : BaseHelper, ILecturerHelper
+	public class LecturerHelper(AppDbContext dbContext) : BaseHelper(dbContext), ILecturerHelper
 	{
-		private readonly UserManager<ApplicationUser> _userManager;
-		public LecturerHelper(AppDbContext dbContext,
-			UserManager<ApplicationUser> userManager) : base(dbContext)
-		{
-			_userManager = userManager;
-		}
-
 		public bool CreateStudyMaterial(StudyMaterialViewModel studyMaterial)
 		{
 			return Create<StudyMaterialViewModel, StudyMaterial>(studyMaterial);
@@ -121,13 +114,23 @@ namespace Logic.Helpers
 								   CourseCode = v.Quiz.Course.Code,
 								   AnswerFile = v.Answer.PhysicalPath,
 								   StudentFullName = v.Student.FullName,
-								   DateSubmitted= v.DateSubmitted.ToFormattedDate()
+								   DateSubmitted= v.DateSubmitted.ToFormattedDate(),
+								   Mark = v.Mark
 							   })
 							   .ToPagedList(page, 25);
 
 			model.Model = quiz;
 
 			return quiz;
+		}
+		public QuizAnswers? AddScoreToQuiz(int? quizId, decimal? mark)
+		{
+			var quizAnswer = GetByPredicate<QuizAnswers>(x => x.QuizId == quizId && x.Active).FirstOrDefault();
+			if (quizAnswer ==  null)
+			{
+				return null;
+			}
+			return Update<QuizAnswers, int>("Mark", mark, quizAnswer.Id);
 		}
 	}
 }

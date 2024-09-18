@@ -14,26 +14,20 @@ namespace LMS.Areas.Student.Controllers
 	[Area("Student")]
 	[Authorize]
 	[SessionTimeout]
-	public class HomeController : BaseController
+	[Authorize(Roles = "Student")]
+	public class HomeController(
+		IAdminHelper adminHelper,
+		IDropDownHelper dropDownHelper,
+		IEmailHelper emailHelper,
+		IMediaService mediaService,
+		IStudentHelper studentHelper) : BaseController
 	{
-		private readonly IAdminHelper _adminHelper;
-		private readonly IStudentHelper _studentHelper;
-		private readonly IDropDownHelper _dropDownHelper;
-		private readonly IEmailHelper _emailHelper;
-		private readonly IMediaService _mediaService;
-		public HomeController(
-			IAdminHelper adminHelper,
-			IDropDownHelper dropDownHelper,
-			IEmailHelper emailHelper,
-			IMediaService mediaService,
-			IStudentHelper studentHelper)
-		{
-			_adminHelper = adminHelper;
-			_dropDownHelper = dropDownHelper;
-			_emailHelper = emailHelper;
-			_mediaService = mediaService;
-			_studentHelper = studentHelper;
-		}
+		private readonly IAdminHelper _adminHelper = adminHelper;
+		private readonly IStudentHelper _studentHelper = studentHelper;
+		private readonly IDropDownHelper _dropDownHelper = dropDownHelper;
+		private readonly IEmailHelper _emailHelper = emailHelper;
+		private readonly IMediaService _mediaService = mediaService;
+
 		public IActionResult Index()
 		{
 			ViewBag.Layout = UserHelper.GetRoleLayout();
@@ -81,6 +75,16 @@ namespace LMS.Areas.Student.Controllers
 			quizDTO.StudentId = CurrentUserId;
 			var isAnsUploaded = _studentHelper.UploadAnswer(quizDTO);
 			return isAnsUploaded ? ResponseHelper.JsonSuccess($"Answer uploaded successfully") : ResponseHelper.JsonError($"Unable to upload answer");
+		}
+		[HttpGet]
+		public IActionResult Scores(IPageListModel<QuizAnswersViewModel>? model, int page = 1)
+		{
+			ViewBag.Layout = UserHelper.GetRoleLayout();
+			var quizAnswers = _studentHelper.FetchQuizAnswersByStudentId(CurrentUserId, model, page);
+			model.Model = quizAnswers;
+			model.SearchAction = "Scores";
+			model.SearchController = "Home";
+			return View(model);
 		}
 	}
 }

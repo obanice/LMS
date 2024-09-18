@@ -1,4 +1,5 @@
-﻿using Core.ViewModels;
+﻿using Core.Models;
+using Core.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,6 +11,7 @@ namespace Logic.IHelpers
 {
 	public interface ILecturerHelper
 	{
+		QuizAnswers? AddScoreToQuiz(int? quizId, decimal? mark);
 		bool AddQuiz(QuizDTO quizViewModel);
 		bool CreateStudyMaterial(StudyMaterialViewModel studyMaterial);
 		IPagedList<QuizAnswersViewModel> FetchQuizAnswersByQuizId(int? quizId, IPageListModel<QuizAnswersViewModel> model, int page);

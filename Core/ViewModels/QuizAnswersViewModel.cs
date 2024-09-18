@@ -8,7 +8,7 @@ namespace Core.ViewModels
 {
     public class QuizAnswersViewModel
     {
-        public double? Mark { get; set; }
+        public decimal? Mark { get; set; }
         public int? Id { get; set; }
         public string? StudentFullName { get; set; }
         public string? CourseCode { get; set; }
