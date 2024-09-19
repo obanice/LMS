@@ -15,7 +15,7 @@ namespace LMS.Controllers
 {
 	[Authorize]
 	[SessionTimeout]
-	[Authorize(Roles = "Admin")]
+	[Authorize(Roles = "Admin, Lecturer")]
 	public class AdminController : BaseController
 	{
 		private readonly IAdminHelper _adminHelper;

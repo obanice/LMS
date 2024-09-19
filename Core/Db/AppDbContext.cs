@@ -17,5 +17,6 @@ namespace Core.Db
         public DbSet<UserVerification> UserVerifications { get; set; }
         public DbSet<Media> Medias { get; set; }
         public DbSet<Quiz> Quiz { get; set; }
+        public DbSet<QuizAnswers> QuizAnswers { get; set; }
     }
 }

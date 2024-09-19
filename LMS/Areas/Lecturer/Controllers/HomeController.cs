@@ -32,7 +32,8 @@ namespace LMS.Areas.Lecturer.Controllers
 		public IActionResult Index()
 		{
 			ViewBag.Layout = UserHelper.GetRoleLayout();
-			return View();
+			var lectuereDashboards = _lecturerHelper.GetLecturersDashboardInfo(CurrentUserId);
+			return View(lectuereDashboards);
 		}
 		[HttpPost]
 		public async Task<JsonResult> AddStudyMaterial(int courseId, IFormFile file)
