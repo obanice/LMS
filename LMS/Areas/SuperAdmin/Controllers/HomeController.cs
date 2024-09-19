@@ -119,7 +119,7 @@ namespace LMS.Areas.SuperAdmin.Controllers
 				return ResponseHelper.JsonError("Error occurred");
 			}
 			var user = _context.ApplicationUsers
-				.FirstOrDefault(a => a.UserId == userId && a.IsDeactivated == false);
+				.FirstOrDefault(a => a.Id == userId && a.IsDeactivated == false);
 			if (user == null)
 			{
 				return ResponseHelper.JsonError("Error occurred");

@@ -16,5 +16,6 @@ namespace Logic.IHelpers
 		bool CreateStudyMaterial(StudyMaterialViewModel studyMaterial);
 		IPagedList<QuizAnswersViewModel> FetchQuizAnswersByQuizId(int? quizId, IPageListModel<QuizAnswersViewModel> model, int page);
 		IPagedList<QuizViewModel> FetchQuizByLecturerId(int? courseId,IPageListModel<QuizViewModel> model, int page, string loggedInUserId);
+		LectuereDashboardViewModel GetLecturersDashboardInfo(string userId);
 	}
 }
