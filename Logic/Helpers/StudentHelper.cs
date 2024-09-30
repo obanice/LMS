@@ -19,19 +19,47 @@ namespace Logic.Helpers
 		IPagedList<CourseViewModel> Courses(IPageListModel<CourseViewModel> model, int? departmentId, int? levelId, int page);
 		IPagedList<QuizViewModel> FetchAllQuiz(IPageListModel<QuizViewModel> model, int page, int? courseId);
 		IPagedList<QuizAnswersViewModel> FetchQuizAnswersByStudentId(string loggedInUserId, IPageListModel<QuizAnswersViewModel> model, int page);
-		StudentDashboardViewModel GetStudyMaterials(int? departmentId);
-		bool UploadAnswer(QuizAnswersDTO quizAnswers);
-	}
+        StudentDashboardViewModel StudentDashboard(int departmentId);
+		List<StudyMaterialViewModel> GetStudyMaterials(int? departmentId);
+
+        bool UploadAnswer(QuizAnswersDTO quizAnswers);
+        List<QuizViewModel> GetQuizByDepartmentId(int? departmentId);
+    }
 
 	public class StudentHelper(AppDbContext dbContext) : BaseHelper(dbContext), IStudentHelper
     {
 		private readonly AppDbContext db = dbContext;
 
-		public StudentDashboardViewModel GetStudyMaterials(int? departmentId)
+		public StudentDashboardViewModel StudentDashboard(int departmentId)
 		{
 			var studentDashboardViewModel = new StudentDashboardViewModel();
 
-			var courses = GetByPredicate<StudyMaterial>(x => x.Active && x.Course != null && x.Course.DepartmentId == departmentId)
+			studentDashboardViewModel.StudyMaterials = GetStudyMaterials(departmentId);
+			studentDashboardViewModel.QuizViewModel = GetQuizByDepartmentId(departmentId);
+
+            return studentDashboardViewModel;
+		}
+        public List<QuizViewModel> GetQuizByDepartmentId(int? departmentId)
+        {
+
+            return [.. db.Quiz.Include(x => x.Course)
+				.Include(x=>x.Question)
+				.Where(x => x.Active && x.Course != null && x.Course.DepartmentId == departmentId)
+				.Select(v => new QuizViewModel
+                {
+                    Id = v.Id,
+					QuestionFile = v.Question.PhysicalPath,
+                    CourseId = v.CourseId,
+                    DateCreated = v.DateCreated.ToFormattedDate(),
+					CourseCode = v.Course.Code,
+					Lecturer = $"{v.Course.Lecturer.FirstName} {v.Course.Lecturer.LastName}",
+				})];
+        }
+        public List<StudyMaterialViewModel> GetStudyMaterials(int? departmentId)
+        {
+
+			return [.. db.StudyMaterials
+				.Where(x => x.Active && x.Course != null && x.Course.DepartmentId == departmentId)
 				.Include(x => x.MediaType)
 				.Include(x => x.Course)
 				.ThenInclude(x => x.Lecturer)
@@ -40,51 +68,15 @@ namespace Logic.Helpers
 					Id = v.Id,
 					CourseId = v.CourseId,
 					Name = v.MediaType.Name,
-					LecturerName = $"{v.Course.Lecturer.FirstName} {v.Course.Lecturer.LastName}",
+					 LecturerName = $"{v.Course.Lecturer.FirstName} {v.Course.Lecturer.LastName}",
 					Code = v.Course.Code,
 					File = v.MediaType.PhysicalPath,
 					DateCreated = v.DateCreated.ToFormattedDate(),
 					FileExtension = v.MediaType.MediaType.GetEnumDescription()
-
-				}).ToList();
-
-			    var quiz = GetByPredicate<Quiz>()
-			   .Include(t => t.Question)
-			   .Include(t => t.Lecturer)
-			   .Include(t => t.Course)
-			   .Where(x => x.Active && x.Course.DepartmentId == departmentId)
-			   .Select(c => new QuizViewModel
-			   {
-				   Id = c.Id,
-				   CourseId = c.CourseId,
-				   QuestionFile = c.Question.PhysicalPath,
-				   Lecturer = $"{c.Lecturer.FirstName} {c.Lecturer.LastName}",
-				   CourseCode = c.Course.Code,
-				   DateCreated = c.DateCreated.ToFormattedDate(),
-
-			   }).ToList();
-			studentDashboardViewModel.CourseMaterialViewModels = courses;
-			studentDashboardViewModel.QuizViewModel = quiz;
-			return studentDashboardViewModel;
-			//return [.. db.StudyMaterials
-			//	.Where(x => x.Active && x.Course != null && x.Course.DepartmentId == departmentId)
-			//	.Include(x => x.MediaType)
-			//	.Include(x => x.Course)
-			//	.ThenInclude(x => x.Lecturer)
-			//	.Select(v => new StudyMaterialViewModel
-			//	{
-			//		Id = v.Id,
-			//		CourseId = v.CourseId,
-			//		Name = v.MediaType.Name,
-			//		 LecturerName = $"{v.Course.Lecturer.FirstName} {v.Course.Lecturer.LastName}",
-			//		Code = v.Course.Code,
-			//		File = v.MediaType.PhysicalPath,
-			//		DateCreated = v.DateCreated.ToFormattedDate(),
-			//		FileExtension = v.MediaType.MediaType.GetEnumDescription()
-			//	})];
+				})];
 		}
 
-		public IPagedList<QuizViewModel> FetchAllQuiz(IPageListModel<QuizViewModel> model, int page, int? courseId)
+        public IPagedList<QuizViewModel> FetchAllQuiz(IPageListModel<QuizViewModel> model, int page, int? courseId)
 		{
 			var user = Utility.GetCurrentUser();
 			IQueryable<Quiz> query = GetByPredicate<Quiz>(p => p.Active);

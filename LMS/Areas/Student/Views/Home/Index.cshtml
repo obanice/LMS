@@ -86,10 +86,10 @@
 										<th>File</th>
 									</tr>
 								</thead>
-								@if (Model.CourseMaterialViewModels != null && Model.CourseMaterialViewModels.Any())
+								@if (Model.StudyMaterials != null && Model.StudyMaterials.Any())
 								{
 									<tbody>
-										@foreach (var courses in Model.CourseMaterialViewModels)
+										@foreach (var courses in Model.StudyMaterials)
 										{
 											<tr>
 												<td>@courses.Code</td>

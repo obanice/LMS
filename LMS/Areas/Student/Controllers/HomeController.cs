@@ -31,7 +31,7 @@ namespace LMS.Areas.Student.Controllers
 		public IActionResult Index()
 		{
 			ViewBag.Layout = UserHelper.GetRoleLayout();
-			var courseMatrials = _studentHelper.GetStudyMaterials(CurrentUserDepartmentId);
+			var courseMatrials = _studentHelper.StudentDashboard((int)CurrentUserDepartmentId);
 			return View(courseMatrials);
 		}
 		public IActionResult Courses(IPageListModel<CourseViewModel>? model, int page = 1)
@@ -86,6 +86,16 @@ namespace LMS.Areas.Student.Controllers
 			model.SearchAction = "Scores";
 			model.SearchController = "Home";
 			return View(model);
+		}
+		[HttpGet]
+		public IActionResult GetQuiz(int departmentId)
+		{
+			var quiz = _studentHelper.GetQuizByDepartmentId(departmentId);
+			if (quiz != null)
+			{
+				return View(quiz);
+			}
+			return View();
 		}
 	}
 }

@@ -8,7 +8,7 @@ namespace Core.ViewModels
 {
 	public class StudentDashboardViewModel
 	{
-		public List<StudyMaterialViewModel>? CourseMaterialViewModels { get; set; }
+		public List<StudyMaterialViewModel>? StudyMaterials { get; set; }
 		public List<QuizViewModel>? QuizViewModel { get; set; }
 	}
 }
