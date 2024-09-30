@@ -14,6 +14,7 @@ namespace Core.ViewModels
         public string? AnswerFile { get; set; }
         public string? DateCreated { get; set; }
 		public int? CourseId { get; set; }
+		public string? Lecturer { get; set; }
 	}
 	public class QuizDTO
 	{
