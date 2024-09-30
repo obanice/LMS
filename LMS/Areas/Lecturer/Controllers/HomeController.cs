@@ -31,8 +31,10 @@ namespace LMS.Areas.Lecturer.Controllers
 
 		public IActionResult Index()
 		{
+			
 			ViewBag.Layout = UserHelper.GetRoleLayout();
 			var lectuereDashboards = _lecturerHelper.GetLecturersDashboardInfo(CurrentUserId);
+
 			return View(lectuereDashboards);
 		}
 		[HttpPost]

@@ -16,8 +16,13 @@ namespace Core.ViewModels
 		public int? CourseId { get; set; }
 		public string? Code { get; set; }
 		public string? Name { get; set; }
+		public string?LecturerName { get; set; }
+		
 		public string Date { get; set; }
+		public string? DateCreated { get; set; }
 		public string? File { get; set; }
 		public string? FileExtension { get; set; }
+		public List<CourseViewModel>? CourseViewModels { get; set; }
+		public List<QuizAnswersViewModel>? QuizAnswers { get; set; }
 	}
 }

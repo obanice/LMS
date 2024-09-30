@@ -31,7 +31,8 @@ namespace LMS.Areas.Student.Controllers
 		public IActionResult Index()
 		{
 			ViewBag.Layout = UserHelper.GetRoleLayout();
-			return View();
+			var courseMatrials = _studentHelper.GetStudyMaterials(CurrentUserDepartmentId);
+			return View(courseMatrials);
 		}
 		public IActionResult Courses(IPageListModel<CourseViewModel>? model, int page = 1)
 		{

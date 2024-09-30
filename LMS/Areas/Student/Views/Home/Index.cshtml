@@ -1,4 +1,7 @@
-﻿@{
+﻿@using Core
+@using Core.ViewModels;
+@model Core.ViewModels.StudentDashboardViewModel
+@{
 	ViewData["Title"] = "Index";
 	Layout = ViewBag.Layout;
 }
@@ -39,18 +42,26 @@
 										<th>File</th>
 									</tr>
 								</thead>
-								<tbody>
-									<tr>
-										<td>CSC 302</td>
-										<td>14/08/2024</td>
-										<td>Marv O Yohanan</td>
-										<td>
-											<div class="dropdown action-label">
-												<a class="btn btn-white btn-sm btn-rounded" href="#"><i class="fa fa-dot-circle-o text-success"></i> File</a>
-											</div>
-										</td>
-									</tr>
-								</tbody>
+								@if (Model.QuizViewModel != null && Model.QuizViewModel.Any())	
+								{
+									<tbody>
+										@foreach (var quiz in Model.QuizViewModel)
+										{
+											<tr>
+												<td>@quiz.CourseCode</td>
+												<td>@quiz.DateCreated</td>
+												<td>@quiz.Lecturer</td>
+												<td>
+													<div class="dropdown action-label">
+														<a class="btn btn-white btn-sm btn-rounded" href="@quiz.QuestionFile"><i class="fa fa-dot-circle-o text-success"></i> File</a>
+													</div>
+												</td>
+											</tr>
+										}
+									</tbody>
+								}
+
+								
 							</table>
 						</div>
 					</div>
@@ -62,7 +73,7 @@
 			<div class="col-md-6 d-flex">
 				<div class="card card-table flex-fill">
 					<div class="card-header">
-						<h3 class="card-title mb-0">Recent Study Material</h3>
+						<h3 class="card-title mb-0">Study Material</h3>
 					</div>
 					<div class="card-body">
 						<div class="table-responsive">
@@ -75,18 +86,26 @@
 										<th>File</th>
 									</tr>
 								</thead>
-								<tbody>
-									<tr>
-										<td>CSC 302</td>
-										<td>14/08/2024</td>
-										<td>Marv O Yohanan</td>
-										<td>
-											<div class="dropdown action-label">
-												<a class="btn btn-white btn-sm btn-rounded" href="#"><i class="fa fa-dot-circle-o text-success"></i> File</a>
-											</div>
-										</td>
-									</tr>
-								</tbody>
+								@if (Model.CourseMaterialViewModels != null && Model.CourseMaterialViewModels.Any())
+								{
+									<tbody>
+										@foreach (var courses in Model.CourseMaterialViewModels)
+										{
+											<tr>
+												<td>@courses.Code</td>
+												<td>@courses.DateCreated</td>
+												<td>@courses.LecturerName</td>
+												<td>
+													<div class="dropdown action-label">
+														<a class="btn btn-white btn-sm btn-rounded" href="@courses.File"><i class="fa fa-dot-circle-o text-success"></i> File</a>
+													</div>
+												</td>
+											</tr>
+										}
+									</tbody>
+								}
+
+								
 							</table>
 						</div>
 					</div>
