@@ -8,5 +8,6 @@ namespace Logic.IHelpers
         Task<bool> CreateUser(ApplicationUserViewModel userDetails);
         Task<ApplicationUser>? FindByEmailAsync(string email);
         Task<ApplicationUser>? FindByPhoneNumber(string phone);
+        string GetValidatedUrl();
     }
 }

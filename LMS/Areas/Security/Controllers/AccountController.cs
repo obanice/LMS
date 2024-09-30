@@ -95,7 +95,7 @@ namespace LMS.Areas.Security.Controllers
                 var currentUser = JsonConvert.SerializeObject(user, settings);
                 HttpContext.Session.SetString("loggedInUser", currentUser);
 
-                var url = UserHelper.GetValidatedUrl();
+                var url = _userHelper.GetValidatedUrl();
                 return Json(new { isError = false, dashboard = url });
             }
             catch (Exception ex)

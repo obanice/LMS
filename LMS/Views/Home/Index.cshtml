@@ -1,6 +1,13 @@
-﻿@{
+﻿@inject Logic.IHelpers.IUserHelper userHelper
+@{
+    var dashboard = string.Empty;
     ViewData["Title"] = "Home Page";
     Layout = null;
+    var user = Utility.GetCurrentUser();
+    if (user != null && !string.IsNullOrEmpty(user.UserName))
+    {
+        dashboard = userHelper.GetValidatedUrl();
+    }
 }
 <!DOCTYPE html>
 <html lang="en">
@@ -33,38 +40,11 @@
 
         <!--// Header \\-->
         <header id="wm-header" class="wm-header-two">
-
-            <!--// TopStrip \\-->
-            <div class="wm-topstrip">
-                <div class="container">
-                    <div class="row">
-                        <div class="col-md-12">
-                            <ul class="wm-stripinfo">
-                                <li><i class="wmicon-location"></i> 2925 Swick Hill Street, Charlotte, NC 28202</li>
-                                <li><i class="wmicon-technology4"></i> +1 984-700-7129</li>
-                                <li><i class="wmicon-time2"></i> Mon - fri: 7:00am - 6:00pm</li>
-                            </ul>
-                            <div class="wm-right-section">
-                                <ul class="wm-login-section">
-                                    <li><a href="#" data-toggle="modal" data-target="#ModalLogin">Login as Student</a></li>
-                                    <li><a href="#" data-toggle="modal" data-target="#ModalLoginTwo">Login as Instructor</a></li>
-                                </ul>
-                                <form class="wm-search-section">
-                                    <input type="text" value="Type your search" onblur="if(this.value == '') { this.value ='Type your search'; }" onfocus="if(this.value =='Type your search') { this.value = ''; }">
-                                    <input type="submit" value="">
-                                    <i class="wmicon-search wm-color-two"></i>
-                                </form>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <!--// TopStrip \\-->
             <!--// MainHeader \\-->
             <div class="wm-main-header">
                 <div class="container">
                     <div class="row">
-                        <div class="col-md-3"><a href="index-two.html" class="wm-logo"><img src="~/homepage/images/logo-2.png" alt=""></a></div>
+                        <div class="col-md-3"><a asp-controller="Home" asp-action="Index" class="wm-logo"><img src="~/homepage/images/logo-2.png" alt=""></a></div>
                         <div class="col-md-9">
                             <!--// Navigation \\-->
                             <nav class="navbar navbar-default">
@@ -76,18 +56,15 @@
                                         <span class="icon-bar"></span>
                                     </button>
                                 </div>
-                                <div class="collapse navbar-collapse" id="navbar-collapse-1">
-                                    <ul class="nav navbar-nav">
-                                        <li class="active">
-                                            <a href="#">Home</a>
-                                        </li>
-                                        <li>
-                                            <a href="/Admin/Index">Dashboard</a>
-                                        </li>
-                                    </ul>
-                                </div>
                             </nav>
-                            <a href="/Security/Account/Login" class="wm-enroll-btn wm-color-two"><i class="wmicon-tool3"></i> Enroll</a>
+                            @if (!string.IsNullOrEmpty(user?.UserName))
+                            {
+                                <a href="@dashboard" class="wm-enroll-btn wm-color-two">Dashboard</a>
+                            }
+                            else
+                            {
+                                <a href="/Security/Account/Login" class="wm-enroll-btn wm-color-two">Login</a>
+                            }
                         </div>
                     </div>
                 </div>

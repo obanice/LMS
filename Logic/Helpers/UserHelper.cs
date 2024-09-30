@@ -31,7 +31,7 @@ namespace Logic.Helpers
                 .ConfigureAwait(false);
         }
 
-        public static string GetValidatedUrl()
+        public string GetValidatedUrl()
         {
             var loggedInUser = Utility.GetCurrentUser();
             var roleUrlMap = new Dictionary<string, string>
