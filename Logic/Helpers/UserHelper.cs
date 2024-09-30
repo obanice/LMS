@@ -3,8 +3,10 @@ using Core.Db;
 using Core.Models;
 using Core.ViewModels;
 using Logic.IHelpers;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json;
 
 namespace Logic.Helpers
 {
@@ -30,7 +32,31 @@ namespace Logic.Helpers
                 .FirstOrDefaultAsync()
                 .ConfigureAwait(false);
         }
+        public async Task<ApplicationUser> UpdateSession(string? userName)
+        {
+			var settings = new JsonSerializerSettings
+			{
+				ReferenceLoopHandling = ReferenceLoopHandling.Ignore
+			};
+			var user = await FindByEmailAsync(userName).ConfigureAwait(false);
+			if (user == null)
+			{
+				user = await FindByPhoneNumber(userName).ConfigureAwait(false);
+			}
+			user.Roles = (List<string>)await _userManager.GetRolesAsync(user).ConfigureAwait(false);
 
+			user.UserRole = user.Roles.Contains(Utility.Constants.SuperAdminRole) ? Utility.Constants.SuperAdminRole :
+							user.Roles.Contains(Utility.Constants.AdminRole) ? Utility.Constants.AdminRole :
+							user.Roles.Contains(Utility.Constants.LecturerRole) ? Utility.Constants.LecturerRole :
+							Utility.Constants.StudentRole;
+
+			user.RoleId = _context.UserRoles.FirstOrDefault(x => x.UserId == user.Id)?.RoleId;
+
+			//Stored User to session
+			var currentUser = JsonConvert.SerializeObject(user, settings);
+			AppHttpContext.Current.Session.SetString("loggedInUser", currentUser);
+            return user;
+		}
         public string GetValidatedUrl()
         {
             var loggedInUser = Utility.GetCurrentUser();
@@ -41,7 +67,10 @@ namespace Logic.Helpers
                 { Utility.Constants.AdminRole, LMSConstants.Dashboard },
                 { Utility.Constants.StudentRole, LMSConstants.StudentDashboard }
             };
-
+            if (loggedInUser.DepartmentId == null || loggedInUser.DepartmentId == 0)
+            {
+               loggedInUser = UpdateSession(loggedInUser.UserName).Result;
+			}
             foreach (var role in loggedInUser.Roles)
             {
                 if (roleUrlMap.TryGetValue(role, out var url))

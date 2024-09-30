@@ -16,11 +16,14 @@ namespace Logic.Helpers
 	{
 		private readonly AppDbContext db;
 		private readonly UserManager<ApplicationUser> _userManager;
+		private readonly IStudentHelper _studentHelper;
 		public AdminHelper(AppDbContext dbContext, 
-			UserManager<ApplicationUser> userManager):base(dbContext)
+			UserManager<ApplicationUser> userManager,
+			IStudentHelper studentHelper):base(dbContext)
 			{
 				db = dbContext;
 				_userManager = userManager;
+			_studentHelper = studentHelper;
 			}
 		public IPagedList<LecturerViewModel> Lectures(IPageListModel<LecturerViewModel> model, int? departmentId, int page)
 		{
@@ -183,7 +186,30 @@ namespace Logic.Helpers
 				})];
 		}
 		
+		public AdminDashboardViewModel FetchAdminData(int? departmentId)
+		{
+			var dashboardViewModel = new AdminDashboardViewModel();
+			dashboardViewModel.CoursesCount = CoursesByDepartmentId(departmentId).Count;
+			dashboardViewModel.LecturerCount = _userManager.GetUsersInRoleAsync(Utility.Constants.LecturerRole).Result.Count;
+			dashboardViewModel.StudentCount = _userManager.GetUsersInRoleAsync(Utility.Constants.StudentRole).Result.Count;
+			return dashboardViewModel;
+		}
+		public List<CourseViewModel> CoursesByDepartmentId(int? departmentId)
+		{
 
+			return [..GetByPredicate<Course>(c => c.DepartmentId == departmentId && c.Active)
+				.Include(t => t.Level)
+				.Include(t => t.Semester)
+				.Select(c => new CourseViewModel
+				{
+					Id = c.Id,
+					Code = c.Code,
+					Name = c.Name,
+					Level = c.Level.Name,
+					Semester = c.Semester.Name,
+
+				}).ToList()];
+		}
 		public bool AddMaterial(int? courseId, int? mediaId)
 		{
 			var materia = new StudyMaterial

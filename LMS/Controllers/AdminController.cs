@@ -36,7 +36,8 @@ namespace LMS.Controllers
 		public IActionResult Index()
 		{
 			ViewBag.Layout = UserHelper.GetRoleLayout();
-			return View();
+			var adminDashboardViewModel = _adminHelper.FetchAdminData(CurrentUserDepartmentId);
+			return View(adminDashboardViewModel);
 		}
 		[HttpGet]
 		public IActionResult Lecturers(IPageListModel<LecturerViewModel>? model, int page = 1)
