@@ -19,6 +19,7 @@ namespace Core.ViewModels
 		public string? Semester { get; set; }
 		public int? LevelId { get; set; }
 		public string? Level { get; set; }
+		public string? DateCreated { get; set; }
 		public string? Name { get; set; }
 	}
 }
