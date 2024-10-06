@@ -94,6 +94,8 @@ namespace Logic.Helpers
 		{
 			IQueryable<Course> query = GetByPredicate<Course>(p => p.Active);
 
+			//lecturerId = "410067eb-617d-4669-ab97-d64f7c8eacf0";
+
 			if (departmentId.HasValue && departmentId != 0)
 			{
 				query = query.Where(p => p.DepartmentId == departmentId);

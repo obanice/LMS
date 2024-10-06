@@ -44,10 +44,10 @@ namespace LMS.Areas.Student.Controllers
 			model.SearchController = "Home";
 			return View(model);
 		}
-		public IActionResult Materials()
+		public IActionResult Materials(int courseId)
 		{
 			ViewBag.Layout = UserHelper.GetRoleLayout();
-			var studyMaterials = _studentHelper.GetStudyMaterials(CurrentUserDepartmentId);
+			var studyMaterials = _studentHelper.GetStudyMaterials(CurrentUserDepartmentId, courseId);
 			return View(studyMaterials);
 		}
 		[HttpGet]
