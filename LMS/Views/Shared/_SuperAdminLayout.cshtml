@@ -10,14 +10,14 @@
 	<title>@ViewData["Title"] | LMS Software</title>
 	<!-- Favicon -->
 	<link rel="shortcut icon" type="image/x-icon" href="/light/assets/img/favicon.png">
-	<link href="~/css/jquery-ui.css" rel="stylesheet" />
+	<link href="~/css/jquery-ui.css" rel="stylesheet"/>
 	<!-- Bootstrap CSS -->
-	<link href="~/light/assets/css/bootstrap.min.css" rel="stylesheet" />
+	<link href="~/light/assets/css/bootstrap.min.css" rel="stylesheet"/>
 	<!-- Fontawesome CSS -->
-	<link href="~/light/assets/css/font-awesome.min.css" rel="stylesheet" />
+	<link href="~/light/assets/css/font-awesome.min.css" rel="stylesheet"/>
 	<!-- Lineawesome CSS -->
-	<link href="~/light/assets/css/line-awesome.min.css" rel="stylesheet" />
-	<link href="~/css/font-awesome.min.css" rel="stylesheet" />
+	<link href="~/light/assets/css/line-awesome.min.css" rel="stylesheet"/>
+	<link href="~/css/font-awesome.min.css" rel="stylesheet"/>
 	<!-- Datatable CSS -->
 	<link href="~/light/assets/css/datatables.bootstrap4.min.css" rel="stylesheet" />
 	<link href="https://cdn.datatables.net/plug-ins/1.13.4/sorting/datetime-moment.js" />
@@ -210,13 +210,19 @@
 						<li class="submenu">
 							<a href="#"><i class="la la-dashboard"></i> <span> Dashboard</span> <span class="menu-arrow"></span></a>
 							<ul style="display: none;">
-								<li><a class="active" href="index.html">Admin Dashboard</a></li>
-								<li><a href="employee-dashboard.html">Employee Dashboard</a></li>
+								@*<li><a class="active" href="index.html">Admin Dashboard</a></li>
+								<li><a href="employee-dashboard.html">Employee Dashboard</a></li>*@
 							</ul>
 						</li>
 						
 						<li>
 							<a asp-area="SuperAdmin" asp-controller="Home" asp-action="Admins"><i class="la la-users"></i> <span>Admins</span> </a>
+						</li>
+						<li>
+							<a asp-area="SuperAdmin" asp-controller="Home" asp-action="Admins"><i class="la la-users"></i> <span>Lecturers</span> </a>
+						</li>
+						<li>
+							<a asp-area="SuperAdmin" asp-controller="Home" asp-action="Admins"><i class="la la-users"></i> <span>Students</span> </a>
 						</li>
 					</ul>
 				</div>

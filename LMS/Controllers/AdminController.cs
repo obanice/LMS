@@ -75,8 +75,8 @@ namespace LMS.Controllers
 				{
 					return ResponseHelper.JsonError("Unable to create lecturer");
 				}
-				var userToken = await _emailHelper.CreateUserToken(lecturer.Email).ConfigureAwait(false);
-				if (userToken != null)
+				var userToken = await _emailHelper.CreateUserToken(lecturer.Email!).ConfigureAwait(false);
+				if (userToken == null)
 				{
 					return ResponseHelper.JsonError("Lecturer added successfully, but error occurred while sending mail");
 				}
@@ -134,7 +134,7 @@ namespace LMS.Controllers
 		{
 			ViewBag.Layout = UserHelper.GetRoleLayout();
 			ViewBag.Lecturer = _dropDownHelper.GetLecturers();
-			ViewBag.Gender = _dropDownHelper.GetDropDownByKey(DropDownEnums.Gender);
+			ViewBag.Gender = _dropDownHelper.GetDropDownByKey(DropDownEnums.Gender);		
 			var courses = _adminHelper.Courses(model, 0, lecturerId, page);
 			model.Model = courses;
 			ViewBag.LecturerName = courses?.FirstOrDefault()?.LecturerName;
@@ -163,5 +163,20 @@ namespace LMS.Controllers
 			var isMaterialSaved = _adminHelper.AddMaterial(courseId,mediaId);
 			return isMaterialSaved ? ResponseHelper.JsonSuccess($"Saved successfully") : ResponseHelper.JsonError($"Unable to save material");
 		}
+
+		//[HttpPost]
+		//[DisableRequestSizeLimit]
+		//public async Task<JsonResult> RemoveMaterials(int? courseId, IFormFile file)
+		//{
+		//	if (courseId == 0 || file == null)
+		//	{
+		//		return ResponseHelper.JsonError("Error occurred");
+		//	}
+		//	var fileName = ContentDispositionHeaderValue.Parse(file.ContentDisposition).FileName?.Trim('"');
+		//	var media = await _mediaService.DeleteMediaAsync(file.OpenReadStream(), fileName, Utility.Constants.StudyMaterials, _mediaService.GetMediaType(fileName)).ConfigureAwait(false);
+		//	var mediaId = media.Id;
+		//	var isMaterialSaved = _adminHelper.AddMaterial(courseId, mediaId);
+		//	return isMaterialSaved ? ResponseHelper.JsonSuccess($"Deleted successfully") : ResponseHelper.JsonError($"Unable to delete material");
+		//}
 	}
 }
