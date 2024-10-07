@@ -1,9 +1,12 @@
-﻿using Core.Db;
+﻿using Core.Constants;
+using Core.Db;
 using Core.Models;
 using Core.ViewModels;
 using Logic.IHelpers;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using X.PagedList.Extensions;
+using X.PagedList;
 
 namespace Logic.Helpers
 {
@@ -113,5 +116,76 @@ namespace Logic.Helpers
 				FullName = x.FullName,
 			}).ToList();
 		}
+		public IPagedList<ApplicationUserViewModel> Lecturer(IPageListModel<ApplicationUserViewModel> model, int page)
+		{
+			var query = db.ApplicationUsers.Where(p => !p.IsDeactivated).Include(x => x.Gender).AsQueryable();
+
+			if (!query.Any())
+			{
+				return new List<ApplicationUserViewModel>().ToPagedList(page, 25);
+			}
+			query = query.Where(v => db.UserRoles
+					.Any(ur => ur.UserId == v.Id && ur.RoleId == LMSConstants.LecturerRoleId));
+			if (!string.IsNullOrEmpty(model.Keyword))
+			{
+				query = query.Where(v =>
+						v.FirstName.ToLower().Contains(model.Keyword.ToLower()) ||
+						v.Email.ToLower().Contains(model.Keyword.ToLower()) ||
+						v.LastName.ToLower().Contains(model.Keyword.ToLower()) ||
+						v.Gender.Name.ToLower().Contains(model.Keyword.ToLower()) ||
+						v.PhoneNumber.Contains(model.Keyword.ToLower()));
+			}
+			var Lecturer = query
+				.OrderByDescending(v => v.DateCreated)
+				.Select(v => new ApplicationUserViewModel
+				{
+					Id = v.Id,
+					FullName = v.FullName,
+					PhoneNumber = v.PhoneNumber,
+					Email = v.Email,
+					DropDownName = v.Gender.Name
+				})
+				.ToPagedList(page, 25);
+			model.Model = Lecturer;
+			return Lecturer;
+		}
+		
+		public IPagedList<ApplicationUserViewModel> GetStudents(IPageListModel<ApplicationUserViewModel> model, int page)
+		{
+			var query = db.ApplicationUsers.Where(p => !p.IsDeactivated).Include(x => x.Gender).AsQueryable();
+
+			if (!query.Any())
+			{
+				return new List<ApplicationUserViewModel>().ToPagedList(page, 25);
+			}
+			query = query.Where(v => db.UserRoles
+					.Any(ur => ur.UserId == v.Id && ur.RoleId == LMSConstants.StudentRoleId));
+			if (!string.IsNullOrEmpty(model.Keyword))
+			{
+				query = query.Where(v =>
+						v.FirstName.ToLower().Contains(model.Keyword.ToLower()) ||
+						v.Email.ToLower().Contains(model.Keyword.ToLower()) ||
+						v.LastName.ToLower().Contains(model.Keyword.ToLower()) ||
+						v.Department.Name.ToLower().Contains(model.Keyword.ToLower()) ||
+						v.Level.Name.ToLower().Contains(model.Keyword.ToLower()) ||
+						v.PhoneNumber.Contains(model.Keyword.ToLower()));
+			}
+			var students = query
+				.OrderByDescending(v => v.DateCreated)
+				.Select(v => new ApplicationUserViewModel
+				{
+					Id = v.Id,
+					FullName = v.FullName,
+					PhoneNumber = v.PhoneNumber,
+					Email = v.Email,
+					Department = v.Department.Name,
+					Level = v.Level.Name,
+				})
+				.ToPagedList(page, 25);
+			model.Model = students;
+			return students;
+
+		}
+
 	}
 }
