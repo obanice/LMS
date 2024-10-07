@@ -8,5 +8,6 @@ namespace Logic.IHelpers
 		public bool PasswordResetLink(ApplicationUser applicationUser, string linkToClick);
 		Task<UserVerification> GetUserToken(Guid token);
 		Task<bool> MarkTokenAsUsed(UserVerification userVerification);
-	}
+        void ConfirmationMessage(string email, string name);
+    }
 }

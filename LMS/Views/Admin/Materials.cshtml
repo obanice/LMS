@@ -43,8 +43,7 @@
 															<a href="" class="dropdown-link" data-toggle="dropdown"><i class="fa fa-ellipsis-v"></i></a>
 															<div class="dropdown-menu dropdown-menu-right">
 																<a href="@studyMaterial.File" class="dropdown-item">Download</a>
-																<a href="#" class="dropdown-item">Rename</a>
-																<a href="#" class="dropdown-item">Delete</a>
+																<a onclick="deleteMaterial('@studyMaterial.Id')" style="cursor:pointer;" class="dropdown-item">Delete</a>
 															</div>
 														</div>
 														<div class="card-file-thumb">
@@ -59,7 +58,6 @@
 														</div>
 														<div class="card-body">
 															<h6><a href="">@studyMaterial.Name</a></h6>
-															<span>12mb</span>
 														</div>
 														<div class="card-footer">@studyMaterial.Date</div>
 													</div>

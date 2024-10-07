@@ -217,3 +217,24 @@ function addmark() {
 		}
 	});
 }
+function deleteMaterial(materialId) {
+	$.ajax({
+		type: 'post',
+		dataType: 'json',
+		url: '/Admin/DeleteMaterial',
+		data: {
+			materialId: materialId
+		},
+		success: function (result) {
+			if (!result.isError) {
+				var url = window.location.href;
+				successAlertWithRedirect(result.msg, url);
+			} else {
+				errorAlert(result.msg);
+			}
+		},
+		error: function (ex) {
+			errorAlert(ex);
+		}
+	});
+}

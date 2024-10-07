@@ -164,19 +164,15 @@ namespace LMS.Controllers
 			return isMaterialSaved ? ResponseHelper.JsonSuccess($"Saved successfully") : ResponseHelper.JsonError($"Unable to save material");
 		}
 
-		//[HttpPost]
-		//[DisableRequestSizeLimit]
-		//public async Task<JsonResult> RemoveMaterials(int? courseId, IFormFile file)
-		//{
-		//	if (courseId == 0 || file == null)
-		//	{
-		//		return ResponseHelper.JsonError("Error occurred");
-		//	}
-		//	var fileName = ContentDispositionHeaderValue.Parse(file.ContentDisposition).FileName?.Trim('"');
-		//	var media = await _mediaService.DeleteMediaAsync(file.OpenReadStream(), fileName, Utility.Constants.StudyMaterials, _mediaService.GetMediaType(fileName)).ConfigureAwait(false);
-		//	var mediaId = media.Id;
-		//	var isMaterialSaved = _adminHelper.AddMaterial(courseId, mediaId);
-		//	return isMaterialSaved ? ResponseHelper.JsonSuccess($"Deleted successfully") : ResponseHelper.JsonError($"Unable to delete material");
-		//}
+		[HttpPost]
+		public JsonResult DeleteMaterial(int? materialId)
+		{
+			if (materialId == 0)
+			{
+				return ResponseHelper.JsonError("Error occurred");
+			}
+			var isMaterialSaved = _adminHelper.DeleteMaterial(materialId);
+			return isMaterialSaved ? ResponseHelper.JsonSuccess($"Deleted successfully") : ResponseHelper.JsonError($"Unable to delete material");
+		}
 	}
 }

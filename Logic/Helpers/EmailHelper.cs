@@ -57,8 +57,19 @@ namespace Logic.Helpers
 			_emailService.SendEmail(toEmail, subject, message);
 			return true;
 		}
+        public void ConfirmationMessage(string email, string name)
+        {
+            string subject = "LMS Support";
+            string message = "Hi " + name + ",<br/><br/>" +
+							"Welcome to LMS Software! We are excited to have you on board.<br/><br/>" +
+							"Your account has been successfully created, and you're all set to explore the platform.<br/><br/>" +
+							"If you have any questions or need assistance, feel free to reach out by replying to this email. We're here to help!<br/><br/>" +
+							"Best regards,<br/>" +
+							"<b>LMS Software Team</b>";
 
-		public async Task<bool> MarkTokenAsUsed(UserVerification userVerification)
+            _emailService.SendEmail(email, subject, message);
+        }
+        public async Task<bool> MarkTokenAsUsed(UserVerification userVerification)
 		{
 			var VerifiedUser = _context.UserVerifications.FirstOrDefault(s => s.UserId == userVerification.User.Id && !s.Used);
 			if (VerifiedUser == null)

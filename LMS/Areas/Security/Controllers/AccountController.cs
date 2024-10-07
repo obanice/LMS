@@ -131,7 +131,8 @@ namespace LMS.Areas.Security.Controllers
                 var isUserCreated = await _userHelper.CreateUser(applicationUserViewModel).ConfigureAwait(false);
                 if (isUserCreated)
                 {
-					return ResponseHelper.JsonSuccess("Registered successfully, login to continue");
+                    emailHelper.ConfirmationMessage(applicationUserViewModel.Email, applicationUserViewModel.FirstName);
+                    return ResponseHelper.JsonSuccess("Registered successfully, login to continue");
                 }
                 return ResponseHelper.JsonError("Unable to register");
             }

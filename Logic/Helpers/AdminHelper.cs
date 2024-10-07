@@ -174,7 +174,7 @@ namespace Logic.Helpers
 		}
 		public List<StudyMaterialViewModel> GetStudyMaterialsByCoursesById(int?  courseId)
 		{
-			return [.. GetByPredicate<StudyMaterial>(x => x.CourseId == courseId)
+			return [.. GetByPredicate<StudyMaterial>(x => x.CourseId == courseId && x.Active)
 				.Include(x => x.MediaType)
 				.Include(x => x.Course)
 				.Select(v => new StudyMaterialViewModel
@@ -221,6 +221,19 @@ namespace Logic.Helpers
 			};
 			return Create<StudyMaterial, StudyMaterial>(materia);
 		}
-		
-	}
+        public bool DeleteMaterial(int? materialId)
+        {
+            var material = GetByPredicate<StudyMaterial>(x => x.Id == materialId && x.Active).FirstOrDefault();
+			if (material == null)
+			{
+				return false;
+			}
+            var media = GetByPredicate<Media>(x => x.Id == material.MediaTypeId && x.Active).FirstOrDefault();
+            if (media != null)
+            {
+                HardDelete<Media, int>(media.Id);
+            }
+            return HardDelete<StudyMaterial, int>(materialId.Value);
+        }
+    }
 }
