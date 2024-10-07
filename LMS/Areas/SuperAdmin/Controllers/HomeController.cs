@@ -130,5 +130,25 @@ namespace LMS.Areas.SuperAdmin.Controllers
 			return ResponseHelper.JsonError("Deleted Successfully");
 
 		}
+		public IActionResult Lecturer(IPageListModel<ApplicationUserViewModel>? model, int page = 1)
+		{
+			ViewBag.Layout = UserHelper.GetRoleLayout();
+			var lecturer = _superAdminHelper.Lecturer(model, page);
+			model.Model = lecturer;
+			model.SearchAction = "Lecturer";
+			model.SearchController = "Home";
+			return View(model);
+		}
+
+		public IActionResult Students(IPageListModel<ApplicationUserViewModel>? model, int page = 1)
+		{
+			ViewBag.Layout = UserHelper.GetRoleLayout();
+			var students = _superAdminHelper.GetStudents(model, page);
+			model.Model = students;
+			model.SearchAction = "Students";
+			model.SearchController = "Home";
+			return View(model);
+		}
+
 	}
 }
