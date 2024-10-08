@@ -49,4 +49,11 @@
 		<PackageReference Include="X.Web.PagedList" Version="10.1.2" />
 	</ItemGroup>
 
+	<ItemGroup>
+	  <Content Update="Views\Admin\Students.cshtml">
+	    <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+	    <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+	  </Content>
+	</ItemGroup>
+
 </Project>

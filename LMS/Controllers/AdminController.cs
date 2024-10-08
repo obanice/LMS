@@ -22,16 +22,19 @@ namespace LMS.Controllers
 		private readonly IDropDownHelper _dropDownHelper;
 		private readonly IEmailHelper _emailHelper;
 		private readonly IMediaService _mediaService;
+		private readonly ISuperAdminHelper _superAdminHelper;
 		public AdminController(
 			IAdminHelper adminHelper, 
 			IDropDownHelper dropDownHelper,
 			IEmailHelper emailHelper,
-			IMediaService mediaService)
+			IMediaService mediaService,
+            ISuperAdminHelper superAdminHelper)
 		{
 			_adminHelper = adminHelper;
 			_dropDownHelper = dropDownHelper;
 			_emailHelper = emailHelper;
 			_mediaService = mediaService;
+			_superAdminHelper = superAdminHelper;
 		}
 		public IActionResult Index()
 		{
@@ -174,5 +177,14 @@ namespace LMS.Controllers
 			var isMaterialSaved = _adminHelper.DeleteMaterial(materialId);
 			return isMaterialSaved ? ResponseHelper.JsonSuccess($"Deleted successfully") : ResponseHelper.JsonError($"Unable to delete material");
 		}
-	}
+        public IActionResult Students(IPageListModel<ApplicationUserViewModel>? model, int page = 1)
+        {
+            ViewBag.Layout = UserHelper.GetRoleLayout();
+            var students = _superAdminHelper.GetStudents(model, page);
+            model.Model = students;
+            model.SearchAction = "Students";
+            model.SearchController = "Admin";
+            return View(model);
+        }
+    }
 }

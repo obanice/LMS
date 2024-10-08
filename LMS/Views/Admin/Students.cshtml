@@ -1,0 +1,74 @@
+﻿@using Core
+@using Core.ViewModels;
+@model Core.ViewModels.IPageListModel<ApplicationUserViewModel>
+@{
+	ViewData["Title"] = "Students";
+	Layout = ViewBag.Layout;
+	ViewData["CustomActionName"] = Model.SearchAction;
+}
+<style>
+
+	body {
+		counter-reset: Serial;
+	}
+
+	tr td:first-child:before {
+		counter-increment: Serial;
+		content: counter(Serial);
+	}
+</style>
+
+<div class="page-wrapper">
+
+	<div class="content container-fluid">
+
+		<!-- Page Header -->
+		<div class="page-header">
+			<div class="row align-items-center">
+				<div class="col">
+					<h3 class="page-title">Students</h3>
+					<ul class="breadcrumb">
+						<li class="breadcrumb-item"><a href="#">Dashboard</a></li>
+						<li class="breadcrumb-item active">Students</li>
+					</ul>
+				</div>
+			</div>
+		</div>
+		<!-- /Page Header -->
+		<!-- Search Filter -->
+		@Html.Partial("_PageSearcher", Model)
+		<!-- Search Filter -->
+		<section class="card-box">
+			<div class="table-responsive">
+				<table class="table table-striped">
+					<thead>
+						<tr>
+							<th>S/N</th>
+							<th>Full Name</th>
+							<th>PhoneNumber</th>
+							<th>Email</th>
+							<th>Level</th>
+						</tr>
+					</thead>
+					<tbody>
+						@if (Model.Model != null)
+						{
+							@foreach (var students in Model.Model)
+							{
+								<tr>
+									<td></td>
+									<td>@students.FullName</td>
+									<td>@students.PhoneNumber</td>
+									<td>@students.Email</td>
+									<td>@students.Level</td>
+								</tr>
+							}
+						}
+					</tbody>
+				</table>
+			</div>
+		</section>
+	</div>
+	<!-- /Page Content -->
+	@Html.Partial("_Pager", Model.Model)
+</div>

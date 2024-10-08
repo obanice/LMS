@@ -223,7 +223,7 @@
 								<span>Student</span>
 							</li>
 							<li class="submenu">
-								<a href="#"><i class="la la-cube"></i> <span>Students</span></a>
+								<a asp-controller="Admin" asp-action="Students"><i class="la la-cube"></i> <span>Students</span></a>
 							</li>
 						}
 						@if (user.UserRole == Utility.Constants.LecturerRole)
