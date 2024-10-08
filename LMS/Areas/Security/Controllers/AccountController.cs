@@ -146,45 +146,36 @@ namespace LMS.Areas.Security.Controllers
 		[HttpGet]
 		public IActionResult ResetPassword(Guid token)
 		{
-			if (token != Guid.Empty)
-			{
-				//var passwordResetViewmodel = new HomePageDto()
-				//{
-				//	Token = token,
-				//};
-				//return View(passwordResetViewmodel);
-			}
+            ViewBag.Token = token;
 			return View();
 		}
 
 		[HttpPost]
-		public async Task<JsonResult> ResetPassword(string passwordResetViewmodel)
+		public async Task<JsonResult> ResetPassword(string passwordResetViewModel)
 		{
-			var userdetail = JsonConvert.DeserializeObject<PasswordResetViewmodel>(passwordResetViewmodel);
-			if (userdetail != null)
+			var userdetail = JsonConvert.DeserializeObject<PasswordResetViewmodel>(passwordResetViewModel);
+            if (userdetail == null)
+            {
+                return ResponseHelper.JsonError("An error has occurred, try again. Please contact support if the error persists.");
+            }
+			if (userdetail.Password != userdetail.ConfirmPassword)
 			{
-				if (userdetail.Password != userdetail.ConfirmPassword)
-				{
-					return Json(new { isError = true, msg = "Password and confirm password must match" });
-				}
-				var userVerification = await emailHelper.GetUserToken(userdetail.Token).ConfigureAwait(false);
-				if (userVerification != null && !userVerification.Used)
-				{
-					await _userManager.RemovePasswordAsync(userVerification.User).ConfigureAwait(false);
-					await _userManager.AddPasswordAsync(userVerification.User, userdetail.Password).ConfigureAwait(false);
-					await db.SaveChangesAsync().ConfigureAwait(false);
-					await emailHelper.MarkTokenAsUsed(userVerification).ConfigureAwait(false);
-
-					//var sendEmail = _emailHelper.PasswordResetConfirmation(userVerification.User);
-					//if (sendEmail)
-					//{
-					//	return Json(new { isError = false, msg = "Your Password has been reset successfully, you can now use the new password on your next login" });
-					//}
-					return Json(new { isError = true, mgs = "Sorry! The Link You Entered is Invalid or Expired " });
-				}
+				return Json(new { isError = true, msg = "Password and confirm password must match" });
 			}
-			return Json(new { isError = true, mgs = "An error has occurred, try again. Please contact support if the error persists." });
+			var userVerification = await emailHelper.GetUserToken(userdetail.Token).ConfigureAwait(false);
+			if (userVerification == null && userVerification.Used)
+			{
+				return ResponseHelper.JsonError("Sorry! The Link You Entered is Invalid or Expired");
+			}
+            await _userManager.RemovePasswordAsync(userVerification.User).ConfigureAwait(false);
+            await _userManager.AddPasswordAsync(userVerification.User, userdetail.Password).ConfigureAwait(false);
+            await db.SaveChangesAsync().ConfigureAwait(false);
+            await emailHelper.MarkTokenAsUsed(userVerification).ConfigureAwait(false);
+
+            emailHelper.PasswordResetConfirmation(userVerification.User.Email);
+            return ResponseHelper.JsonSuccess("Your Password has been reset successfully, you can now use the new password on your next login");
 		}
+
 		[HttpPost]
 		public async Task<IActionResult> LogOut()
 		{

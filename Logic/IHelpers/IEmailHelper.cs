@@ -9,5 +9,6 @@ namespace Logic.IHelpers
 		Task<UserVerification> GetUserToken(Guid token);
 		Task<bool> MarkTokenAsUsed(UserVerification userVerification);
         void ConfirmationMessage(string email, string name);
+        void PasswordResetConfirmation(string userEmail);
     }
 }

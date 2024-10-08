@@ -69,6 +69,22 @@ namespace Logic.Helpers
 
             _emailService.SendEmail(email, subject, message);
         }
+
+		public void PasswordResetConfirmation(string userEmail)
+		{
+			if (string.IsNullOrEmpty(userEmail))
+			{
+				return;
+			}
+			string subject = "Password Reset Successfully";
+			string message = "Password has been reset successfully, login with your new details to continue" + "</br>" +
+				"<br/>Need help? We’re here for you." + "<br/>" +
+				"Simply reply to this email to contact us. <br/>" +
+				"<br/>" +
+				"Kind regards,<br/>";
+
+			_emailService.SendEmail(userEmail, subject, message);
+		}
         public async Task<bool> MarkTokenAsUsed(UserVerification userVerification)
 		{
 			var VerifiedUser = _context.UserVerifications.FirstOrDefault(s => s.UserId == userVerification.User.Id && !s.Used);
