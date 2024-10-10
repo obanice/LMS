@@ -98,7 +98,7 @@ function resetPassword() {
 	data.Token = $('#token').val();
 	$.ajax({
 		type: 'POST',
-		url: '/Account/ResetPassword/',
+		url: '/Security/Account/ResetPassword/',
 		data:
 		{
 			passwordResetViewModel: JSON.stringify(data)
