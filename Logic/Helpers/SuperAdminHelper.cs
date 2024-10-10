@@ -133,7 +133,8 @@ namespace Logic.Helpers
 						v.Email.ToLower().Contains(model.Keyword.ToLower()) ||
 						v.LastName.ToLower().Contains(model.Keyword.ToLower()) ||
 						v.Gender.Name.ToLower().Contains(model.Keyword.ToLower()) ||
-						v.PhoneNumber.Contains(model.Keyword.ToLower()));
+						v.PhoneNumber.Contains(model.Keyword.ToLower())||
+						v.Department.Name.ToLower().Contains(model.Keyword.ToLower()));
 			}
 			var Lecturer = query
 				.OrderByDescending(v => v.DateCreated)
@@ -143,7 +144,9 @@ namespace Logic.Helpers
 					FullName = v.FullName,
 					PhoneNumber = v.PhoneNumber,
 					Email = v.Email,
-					DropDownName = v.Gender.Name
+					DropDownName = v.Gender.Name,
+					Department = v.Department.Name
+
 				})
 				.ToPagedList(page, 25);
 			model.Model = Lecturer;

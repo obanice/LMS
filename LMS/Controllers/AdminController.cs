@@ -23,18 +23,21 @@ namespace LMS.Controllers
 		private readonly IEmailHelper _emailHelper;
 		private readonly IMediaService _mediaService;
 		private readonly ISuperAdminHelper _superAdminHelper;
+		private readonly IUserHelper _userHelper;
 		public AdminController(
 			IAdminHelper adminHelper, 
 			IDropDownHelper dropDownHelper,
 			IEmailHelper emailHelper,
 			IMediaService mediaService,
-            ISuperAdminHelper superAdminHelper)
+            ISuperAdminHelper superAdminHelper,
+		 IUserHelper userHelper)
 		{
 			_adminHelper = adminHelper;
 			_dropDownHelper = dropDownHelper;
 			_emailHelper = emailHelper;
 			_mediaService = mediaService;
 			_superAdminHelper = superAdminHelper;
+			_userHelper = userHelper;
 		}
 		public IActionResult Index()
 		{
@@ -68,17 +71,23 @@ namespace LMS.Controllers
 				{
 					return ResponseHelper.JsonError("Error occurred");
 				}
+				var checkForEmail = await _userHelper.FindByEmailAsync(lecturerViewModel.Email!)!.ConfigureAwait(false);
+				if (checkForEmail != null)
+				{
+					return ResponseHelper.JsonError("Email belongs to another user");
+				}
 				lecturerViewModel.Department = CurrentUserDepartmentId;
 				if (CurrentUserDepartmentId == 0 || CurrentUserDepartmentId == null)
 				{
 					return ResponseHelper.JsonError("Error occurred");
 				}
+				//var lecturer = await _adminHelper.AddLecturer(lecturerViewModel).ConfigureAwait(false);
 				var lecturer = await _adminHelper.AddLecturer(lecturerViewModel).ConfigureAwait(false);
 				if (lecturer == null)
 				{
 					return ResponseHelper.JsonError("Unable to create lecturer");
 				}
-				var userToken = await _emailHelper.CreateUserToken(lecturer.Email!).ConfigureAwait(false);
+				var userToken = await _emailHelper.CreateUserToken("Obanice44@gmail.com").ConfigureAwait(false);
 				if (userToken == null)
 				{
 					return ResponseHelper.JsonError("Lecturer added successfully, but error occurred while sending mail");

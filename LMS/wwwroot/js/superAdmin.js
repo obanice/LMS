@@ -63,9 +63,6 @@ function deleteDepartmentById() {
 
 }
 
-
-
-
 function adminIdToDelete(id) {
 	debugger
 	$('#delete_adminId').val(id);
